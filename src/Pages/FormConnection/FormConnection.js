@@ -1,17 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import capitalize from 'capitalize';
 import API from 'utils/API';
+import faker from 'faker';
 
 import LandingPage from 'components/common/LandingPage';
 import Input from 'components/common/Input';
 import Checkbox from 'components/common/Checkbox';
 import TextArea from 'components/common/TextArea';
 
-import {addUser} from 'store/actions/user';
 
 import { typography, colors } from 'styles';
+
+import {
+    AUTHENTIFICATE_PATH
+  } from 'Routes/Paths.js';
 
 const Container = styled.div`
     flex : 1;
@@ -223,14 +228,14 @@ class FormConnection extends React.Component {
             firstNameError : false,
             lastName : '',
             lastNameError : false,
-            password : '',
+            password :  '',
             passwordError : '',
             confirmation : '',
             confirmationError : '',
             age : '',
             ageError : false,
-            mail : '',
-            mailError : false,
+            email : '',
+            emailError : false,
             genre : '',
             maleChecked : false,
             femaleChecked : false,
@@ -240,7 +245,8 @@ class FormConnection extends React.Component {
             presentation : '',
             preferences : '',
             contactInformation : '',
-            error : false
+            error : false,
+            redirect : false
         }
         this.handleAvatarChange          = this.handleAvatarChange.bind(this);
         this.handlePseudoChange          = this.handlePseudoChange.bind(this);
@@ -349,8 +355,8 @@ class FormConnection extends React.Component {
 
     handleMailChange(event){
         this.setState({
-            mail : event.target.value,
-            mailError : false
+            email : event.target.value,
+            emailError : false
         }); 
     }
 
@@ -382,7 +388,7 @@ class FormConnection extends React.Component {
             password,
             confirmation,
             age,
-            mail,
+            email,
             genre,
             avatarUrl,
             avatarFile,
@@ -415,8 +421,8 @@ class FormConnection extends React.Component {
           hasError = true;
         }
     
-        if (!mail) {
-          this.setState({mailError : true});
+        if (!email) {
+          this.setState({emailError : true});
           hasError = true;
         }
     
@@ -436,7 +442,7 @@ class FormConnection extends React.Component {
                 lastName     : this.state.lastName,
                 password     : this.state.password,
                 age          : this.state.age,
-                mail         : this.state.mail,
+                email         : this.state.email,
                 genre        : this.state.genre,
                 avatarUrl    : this.state.avatarUrl,
                 avatarFile   : this.state.avatarFile,
@@ -444,7 +450,18 @@ class FormConnection extends React.Component {
                 preferences  : this.state.preferences,
                 contactInformation : this.state.contactInformation
             }
-            API.signup(user);
+            API.signup(user).then((data) => {
+                console.log(data)
+                if (data.data.text === "Succès") {
+                    console.log('ok');
+                    this.setState({redirect : true});
+
+                } /* else {
+                  auth.authenticate(data, () => {
+                    this.setState({redirectToReferrer: true})
+                  })
+                } */
+              });
         }
 
         /* this.props.addUser(user); */
@@ -453,6 +470,9 @@ class FormConnection extends React.Component {
 
     render() {
         const { errorMessage="Veuillez remplir les informations demandées signalées en rouge" } = this.props;
+        if (this.state.redirect) {
+            return <Redirect to={AUTHENTIFICATE_PATH}/>;
+          }
         return (
             <LandingPage>
                 <Container>
@@ -576,6 +596,5 @@ class FormConnection extends React.Component {
     }
 }
 
-export default connect(null, {addUser})(FormConnection);
+export default FormConnection;
 
-/* pseudonym email coordonnées nom genre photo prénom age présentation préférences... */

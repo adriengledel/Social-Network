@@ -5,34 +5,11 @@ const headers = {
 const url = "http://localhost:8000"
 
 export default {
-    login : function( pseudo,
-                      firstName,
-                      lastName,
-                      age,
-                      mail,
-                      genre,
-                      avatarUrl,
-                      avatarFile,
-                      presentation,
-                      preferences ) {
-        return axios.post(url + '/user/login',{
-            'pseudo'    : pseudo,
-            'firstName' : firstName,
-            'lastName'  : lastName,
-            'age'       : age,
-            'mail'      :mail ,
-            'genre'     :genre ,
-            'avatarUrl' :avatarUrl ,
-            'avatarFile':avatarFile ,
-            'presentation':presentation ,
-            'preferences' : preferences
-            
-        },{
-            headers: headers
-        })
+    login : function(send){
+        return axios.post(url + '/login',send,{headers: headers})
     },
     signup : function(send){
-        return axios.post(url + '/user/signup',send,{headers: headers})
+        return axios.post(url + '/signup',send,{headers: headers})
     },
     
     isAuth : function() {

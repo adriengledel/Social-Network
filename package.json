@@ -5,13 +5,18 @@
   "dependencies": {
     "axios": "^0.18.0",
     "capitalize": "^2.0.0",
+    "connected-react-router": "^6.4.0",
+    "cors": "^2.8.5",
+    "faker": "^4.1.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
+    "react-router-redux": "^4.0.8",
     "react-scripts": "2.1.8",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
+    "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0"
   },
   "scripts": {

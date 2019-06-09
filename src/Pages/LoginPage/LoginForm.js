@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { LOST_PASSWORD_PATH } from 'Routes/Paths';
 
@@ -10,6 +11,7 @@ import TextPresentation from './TextPresentation';
 import Input from 'components/common/Input';
 
 import { colors, shadows, dimensions, typography} from 'styles.js';
+
 
 
 
@@ -127,20 +129,20 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
+    this.handleEmailChange    = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit         = this.handleSubmit.bind(this);
     this.handleRemember       = this.handleRemember.bind(this);
 
     this.state = {
-      username : '',
+      email : '',
       password : '',
       remember : false
     };
   }
 
-  handleUsernameChange(event) {
-    this.setState({username : event.target.value});
+  handleEmailChange(event) {
+    this.setState({email : event.target.value});
   }
 
   handlePasswordChange(event) {
@@ -148,17 +150,18 @@ class LoginForm extends React.Component {
   }
 
   handleSubmit(event) {
+    console.log('submit');
     event.preventDefault();
 
     const { onSubmit } = this.props;
-    let { username, password } = this.state;
+    let { email, password } = this.state;
 
-    username = username.trim();
+    email = email.trim();
     password = password.trim();
 
-    if (username && password) {
-      onSubmit(username, password);
+    if (email && password) {
     }
+    onSubmit({email, password});
   }
 
 
@@ -176,10 +179,13 @@ class LoginForm extends React.Component {
           <Input 
             label="Email"
             mediumSizeLabel={true}
+            onChange={this.handleEmailChange}
           />
           <Input
             label="Mot de passe"
             mediumSizeLabel={true}
+            onChange={this.handlePasswordChange}
+            type="password"
           />
           <Button type="submit" value="Log in" />
           <FormOptions>
