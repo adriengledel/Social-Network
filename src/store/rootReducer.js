@@ -1,11 +1,13 @@
 import {combineReducers} from 'redux';
 import { userReducer } from './reducers/userReducer';
+import { friendsReducer } from './reducers/friends';
 import { composeReducers, createReducer } from './composer';
 import { connectRouter } from 'connected-react-router'
 
 export const createRootReducer = (history) => combineReducers({
   router: connectRouter(history),
-  data : userReducer
+  data : userReducer,
+  friends :  friendsReducer
 })
 
 

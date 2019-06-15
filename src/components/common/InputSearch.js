@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import SearchImgPng from 'components/img/icon-search.png';
+import RowUser      from 'components/common/RowUser';
 
 import { colors } from 'styles';
 
@@ -11,7 +12,7 @@ const Container = styled.div`
   display : flex;
   flex-direction : column;
   justify-content : center;
-  margin-top : 30px;
+  margin-top : 15px;
 `;
 
 const ContainerInput = styled.div`
@@ -39,7 +40,6 @@ const ContainerList = styled.div``;
 const List = styled.div`
   width : 100%;
   height : 300px;
-  background-color : white;
   overflow : auto;
 `;
 
@@ -63,12 +63,11 @@ class InputSearch extends React.Component{
   }
 
   handleFocusInput(){
-    console.log('input')
     this.setState({showList : !this.state.showList});
   }
 
   render(){
-    const { items=[], showList } = this.props;
+    const { items=[], onChange, placeholder } = this.props;
     return(
       <Container>
         <ContainerInput  onBlur={this.handleFocusInput}>
@@ -76,16 +75,16 @@ class InputSearch extends React.Component{
             src={SearchImgPng}
           />
           <Input 
-            placeholder='Rechercher'
+            placeholder={placeholder}
             onChange={this.handleChangeInput}
             onFocus={this.handleFocusInput}
-           
+            onChange={onChange}
           />
         </ContainerInput>
         <ContainerList>
           <List>
             {
-              items.map(item => <Row key={item._id}>{item.pseudo}</Row> )
+              items.map(item => <RowUser key={item._id} user={item} /> )
             }
           </List>
         </ContainerList>

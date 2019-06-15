@@ -17,5 +17,11 @@ export default {
     },
     logout : function() {
         localStorage.clear();
+    },
+    update : function(){
+        return axios.post(url + '/update');
+    },
+    friendRequest : function(send){
+        return axios.post(url+ '/friend',send,{headers: headers});
     }
 }

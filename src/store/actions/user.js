@@ -9,8 +9,8 @@ export const loginRequested = (data) => {
 
      return API.login(data).then(res => {
       localStorage.setItem('itemName', JSON.stringify(res.data.token));
-      console.log(res.data.users)
       localStorage.setItem('users', JSON.stringify(res.data.users));
+      localStorage.setItem('user', JSON.stringify(res.data.user));
       dispatch(loadUser(res.data.user));
       dispatch(loadUsers(res.data.users));
       console.log(res)
@@ -27,7 +27,7 @@ const loadUser = (user) => ({
   user
 });
 
-const loadUsers = (users) => ({
+export const loadUsers = (users) => ({
   type : 'LOAD_USERS',
   users
 });

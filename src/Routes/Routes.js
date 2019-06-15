@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 /*
   Public pages
  */
-import Login        from 'Pages/LoginPage/LoginPage';
-import LostPassword from 'Pages/LostPasswordPage/LostPasswordPage';
+import Login          from 'Pages/LoginPage/LoginPage';
+import LostPassword   from 'Pages/LostPasswordPage/LostPasswordPage';
 import FormConnection from 'Pages/FormConnection/FormConnection';
 import Authentificate from 'Pages/Authentificate/Authentificate';
 import ProfilPage     from 'Pages/ProfilPage/ProfilPage';
+import ProfileUser    from 'Pages/ProfilPage/mobile/ProfileUser';
 
 /*
   Private pages
@@ -40,7 +41,10 @@ const Routes = ({logged}) => (
     Private pages
     */
       <Switch>
+        <Route path={`${PROFIL_PAGE}/:id`} component={ProfileUser} />
         <Route path={PROFIL_PAGE}          component={ProfilPage} />
+        <Route                             component={ProfilPage} />
+
       </Switch>
 );
 

@@ -1,5 +1,6 @@
 const initialState = {
-    users: JSON.parse(localStorage.getItem('users'))
+    users: JSON.parse(localStorage.getItem('users')),
+    user: JSON.parse(localStorage.getItem('user'))
   };
 export const userReducer = (state=initialState, action) => {
   switch(action.type){

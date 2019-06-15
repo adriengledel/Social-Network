@@ -12,7 +12,7 @@ import Input from 'components/common/Input';
 
 import { colors, shadows, dimensions, typography} from 'styles.js';
 
-
+import { FORM_CONNECTION_PATH } from 'Routes/Paths';
 
 
 const Content = styled.div`
@@ -119,9 +119,10 @@ const TryLabel = styled.p`
   margin : 5px 0;
 `;
 
-const LinkTry = styled.a`
+const LinkTry = styled(Link)`
   text-decoration : none;
   color           : ${colors.buttonLogin};
+  text-decoration  : none;
 `;
 
 
@@ -198,7 +199,7 @@ class LoginForm extends React.Component {
           </FormOptions>
           <LinkCreateAccount>
             <TryLabel>Vous n'avez pas encore de compte ?</TryLabel>
-            <LinkTry href="#">Rempli le formulaire d'inscription en cliquant ici</LinkTry>
+            <LinkTry to={FORM_CONNECTION_PATH}>Rempli le formulaire d'inscription en cliquant ici</LinkTry>
           </LinkCreateAccount>
         </Form>
       </Content>

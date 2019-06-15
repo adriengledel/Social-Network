@@ -11,7 +11,8 @@ export const dimensions = {
     xlarge  : 1.5,
     large   : 1.3,
     medium  : 1,
-    small   : 0.7
+    small   : 0.7,
+    xsmall  : 0.5
   };
   
   export const colors = {
@@ -64,6 +65,7 @@ export const dimensions = {
     orangeElectron : '#eab780',
     purpleElectron : '#D59DF6',
     background : '#212836',
+    backgroundHighLight : '#343f56',
     menuHamueger : '#3b4559',
 
     redElectron : '#ed3d4f'
