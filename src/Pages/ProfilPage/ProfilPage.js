@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
+import socketIOClient from "socket.io-client";
 
 import { updateDatas } from 'store/update';
 import { updateFriendRequest } from 'store/actions/friends';
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
+
+var socket;
 
 const Container = styled.div`
   height : 100%;
@@ -17,7 +20,9 @@ class ProfilPage extends React.Component{
     super(props);
     this.handleAcceptRequest      = this.handleAcceptRequest.bind(this);
     this.handleIgnoreRequest      = this.handleIgnoreRequest.bind(this);
+    socket = socketIOClient('http://localhost:8000/');
   }
+
   componentDidMount(){
     this.props.updateDatas();
   }

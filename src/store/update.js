@@ -6,7 +6,7 @@ import API from 'utils/API';
 
 export const updateDatas = () => {
   return (dispatch, getState) => {
-    setInterval(
+    /* setInterval(
       () => {
         var datas = getState();
         var users = datas.data.users;
@@ -25,6 +25,6 @@ export const updateDatas = () => {
 
         })
       },
-    1000);
+    1000); */
   }
 }
