@@ -49,7 +49,6 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(data){
-    console.log('data')
     /* API.login(data).then((data) => {
       console.log(data)
       if (data.data.text === "Authentification réussi") {

@@ -10,6 +10,7 @@ import InputSearchList from 'components/common/InputSearchList';
 import { colors } from 'styles';
 
 import { friendRequest } from 'store/actions/friends';
+import { status } from 'constants/status';
 
 const Container = styled.div`
   display        : flex;
@@ -68,15 +69,20 @@ class ProfileUser extends React.Component{
   constructor(props){
     super(props);
     this.handleClickRequestFriend = this.handleClickRequestFriend.bind(this); 
+    
   }
+  
   handleClickRequestFriend(){
     const { id, user } = this.props;
-
-    this.props.friendRequest(user._id, id);
+    this.props.friendRequest(user._id, id, 2, 4);
   }
+  
+
   render(){
-    const { users, id, user } = this.props;
+    const { users, id, user, friends } = this.props;
     const userProfil = users[id];
+    const myFriends = friends.filter(friend => friend.id === user._id);
+    const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
     return(
       <LandingPage>
         <Container>
@@ -104,7 +110,13 @@ class ProfileUser extends React.Component{
               </Row>
             </Informations>
             <ContainerButton>
-            <Status onClick={this.handleClickRequestFriend}>Demander en ami</Status>
+            <Status onClick={this.handleClickRequestFriend}>
+              {
+                friendProfil.length >= 1 ?
+                status[friendProfil[0].statusId].status :
+                status[1].status
+              }
+            </Status>
             </ContainerButton>
             <InputSearchList 
               placeholder="Liste d'amis"
@@ -123,7 +135,8 @@ export default connect(
   state => ({
     user  : state.data.user,
     users : state.data.users,
-    id : state.router.location.pathname.split('/')[2]
+    id : state.router.location.pathname.split('/')[2],
+    friends : state.friends.friends
   }), 
   {
     friendRequest

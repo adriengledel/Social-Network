@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import SwitchButton from 'components/common/SwitchButton';
 import InputSearch  from 'components/common/InputSearch';
@@ -28,13 +29,14 @@ class FriendsList extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      view : 'test',
-      filter : ''
+      view : 'amis',
+      filter : '',
+      friends : []
     }
     this.handleViewChange = this.handleViewChange.bind(this);
     this.handleSearch     = this.handleSearch.bind(this);
-    this.handleClickUser  = this.handleClickUser.bind(this);
   }
+
   handleViewChange(value){
     this.setState({view : value});
   }
@@ -43,17 +45,14 @@ class FriendsList extends React.Component{
     this.setState({filter : event.target.value})
   }
 
-  handleClickUser(){
-
-  }
-
   render(){
-    const { className, users, friends = {} } = this.props;
-    /* const friendsItems = Object.values(friends);
-    const filteredItems = friendsItems.filter(
-      item => item.firstName.toLowerCase().includes(this.state.filter.trim().toLowerCase()) || 
-              item.lastName.toLowerCase().includes(this.state.filter.trim().toLowerCase())
-    ); */
+    const { className, user, users, friends = [], accepteRequest, ignoreRequest } = this.props;
+
+    const friendsItems = friends.filter(item => item.id === user._id);
+    const allFriends = friendsItems.length >= 1 ? friendsItems[0].userId : [];
+    const friendsConfirmed = allFriends.filter(friend => friend.statusId === 3);
+    const waitingForConfirmation = allFriends.filter(friend => friend.statusId === 2);
+    const requestReceived = allFriends.filter(friend => friend.statusId === 5);
 
     return(
       <Container className={className}>
@@ -61,23 +60,45 @@ class FriendsList extends React.Component{
           <SwitchContainer>
             <SwitchButton
                 items={[
-                  {value : 'Amis', name : 'Amis'},
-                  {value : 'En attente de confirmation', name : 'En attente de confirmation'},
-                  {value : 'Demande reçu', name : 'Demande reçu'}
+                  {value : 'amis', name : 'Amis'},
+                  {value : 'attente', name : 'En attente de confirmation'},
+                  {value : 'demande reçu', name : 'Demande reçu'}
                 ]}
                 value={this.state.view}
-                onSelect={this.handleLoadTypeChange}
+                onSelect={this.handleViewChange}
             />
           </SwitchContainer>
-          <InputSearch
-            showList={true}
-           /*  items={filteredItems} */
-            onChange={this.handleSearch}
-          />
         </Head>
         <Content>
           {
-            /* friends.map(friend => ) */
+            this.state.view === 'amis' ?
+            <InputSearch
+              key='amis'
+              showList={true}
+              items={friendsConfirmed}
+              onChange={this.handleSearch}
+              users={users}
+            /> :
+            this.state.view === 'attente' ?
+            <InputSearch
+              key='attente'
+              showList={true}
+              items={waitingForConfirmation}
+              onChange={this.handleSearch}
+              users={users}
+            /> :
+            this.state.view === 'demande reçu' ?
+            <InputSearch
+              key='demande reçu'
+              showList={true}
+              items={requestReceived}
+              onChange={this.handleSearch}
+              users={users}
+              userId={user._id}
+              buttons
+              onClickLeft={accepteRequest}
+              onClickRight={ignoreRequest}
+            /> : null
           }
         </Content>
       </Container>
@@ -85,4 +106,4 @@ class FriendsList extends React.Component{
   }
 }
 
-export default FriendsList;
+export default connect(null)(FriendsList);

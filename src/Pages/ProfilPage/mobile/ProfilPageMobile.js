@@ -59,13 +59,12 @@ class ProfilPageMobile extends React.Component{
   }
 
   render(){
-    const { users, user, friends } = this.props;
+    const { users, user, friends, accepteRequest, ignoreRequest } = this.props;
     const usersItems = Object.values(users);
     const filteredItems = usersItems.filter(
       item => item.firstName.toLowerCase().includes(this.state.filter.trim().toLowerCase()) || 
               item.lastName.toLowerCase().includes(this.state.filter.trim().toLowerCase())
     );
-    console.log(user);
     return(
       <LandingPage>
         <Container>
@@ -92,9 +91,12 @@ class ProfilPageMobile extends React.Component{
             />
           </Head>
           <Content>
-            <FriendsList 
-              users={usersItems}
+            <FriendsList
+              user={user} 
+              users={users}
               friends={friends}
+              accepteRequest={accepteRequest}
+              ignoreRequest={ignoreRequest}
             />
           </Content>
         </Container>

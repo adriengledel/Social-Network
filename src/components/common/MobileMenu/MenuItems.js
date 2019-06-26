@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const Container = styled.div.attrs(({delay}) => ({
     style : {
-      ok : console.log(delay),
       animationDelay : delay
     }
 }))`

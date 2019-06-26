@@ -5,7 +5,6 @@ import store from './store/store';
 import {history} from 'store/store';
 import { ConnectedRouter } from 'connected-react-router';
 
-console.log(history, 'inapp');
 
 class App extends Component {
   state = {

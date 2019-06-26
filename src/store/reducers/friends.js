@@ -1,5 +1,7 @@
-
-export const friendsReducer = (state={}, action) => {
+const initialState = {
+  friends: JSON.parse(localStorage.getItem('friends'))
+};
+export const friendsReducer = (state=initialState, action) => {
   switch(action.type){
     case 'LOAD_FRIENDS' : 
     return {

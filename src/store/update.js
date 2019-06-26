@@ -20,7 +20,7 @@ export const updateDatas = () => {
 
           if(friends.length !== res.data.friends.length){
             dispatch(loadFriends(res.data.friends));
-           /*  localStorage.setItem('users', JSON.stringify(res.data.users)); */
+            localStorage.setItem('friends', JSON.stringify(res.data.friends));
           }
 
         })

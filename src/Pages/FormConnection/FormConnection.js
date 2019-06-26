@@ -451,9 +451,7 @@ class FormConnection extends React.Component {
                 contactInformation : this.state.contactInformation
             }
             API.signup(user).then((data) => {
-                console.log(data)
                 if (data.data.text === "Succès") {
-                    console.log('ok');
                     this.setState({redirect : true});
 
                 } /* else {

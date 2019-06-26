@@ -16,8 +16,8 @@ const Container = styled.div`
 `;
 
 const Avatar = styled.img`
-  width : 35px;
-  height : 35px;
+  width         : 35px;
+  height        : 35px;
   border-radius : 50%;
 `;
 
@@ -26,12 +26,12 @@ const Name = styled.div`
 `;
 
 const Left = styled(Link)`
-  display : flex;
-  flex-drection : row;
-  align-items : center;
-  cursor : pointer;
+  display         : flex;
+  flex-drection   : row;
+  align-items     : center;
+  cursor          : pointer;
   text-decoration : none;
-  color : white;
+  color           : white;
 `;
 
 const UserWithoutAvatar = styled.div`
@@ -51,10 +51,10 @@ const UserWithoutAvatar = styled.div`
 `;
 
 const Right = styled.div`
-  display : flex;
-  flex-direction : column;
+  display         : flex;
+  flex-direction  : column;
   justify-content : flex-start;
-  align-items : flex-end;
+  align-items     : flex-end;
 `;
 
 const LightConnect = styled.div.attrs(({connect}) => ({
@@ -62,27 +62,28 @@ const LightConnect = styled.div.attrs(({connect}) => ({
     backgroundColor : connect ? colors.greenElectron : colors.redElectron
   }
 }))`
-  border-radius : 50%;
-  width : 7px;
-  height : 7px;
+  border-radius    : 50%;
+  width            : 7px;
+  height           : 7px;
   background-color : white;
-  margin-bottom : 6px;
-  margin-right : 5px;
+  margin-bottom    : 6px;
+  margin-right     : 5px;
 `;
 
 const ContainerButton = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : row;
 `;
 const Button = styled.div`
-  width : 30px;
-  border : 1px solid black;
+  border       : 1px solid black;
   margin-right : 8px;
+  padding      : 2px 5px;
+  border-radius: 3px;
 `;
 
 class RowUser extends React.Component{
   render(){
-    const { user } = this.props;
+    const { user={}, buttons, onClickLeft, onClickRight, userId } = this.props;
 
     return(
       <Container>
@@ -101,10 +102,13 @@ class RowUser extends React.Component{
         </Left>
         <Right>
           <LightConnect connect={user.logged}/>
-          <ContainerButton>
-            <Button>test</Button>
-            <Button>test</Button>
-          </ContainerButton>
+            {
+              buttons ?
+              <ContainerButton>
+                <Button onClick={() => onClickLeft(user._id)}>Accepter</Button>
+                <Button onClick={onClickRight}>Ignorer</Button>
+              </ContainerButton> : null
+            }
         </Right>
       </Container>
     );

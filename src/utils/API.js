@@ -23,5 +23,8 @@ export default {
     },
     friendRequest : function(send){
         return axios.post(url+ '/friend',send,{headers: headers});
+    },
+    updateFriendRequest : function(send){
+        return axios.post(url+ '/updatefriend',send,{headers: headers});
     }
 }
