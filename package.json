@@ -15,8 +15,10 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "2.1.8",
     "redux": "^4.0.1",
+    "redux-multi": "file:node_modules/redux-multi",
     "redux-saga": "^1.0.2",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0"
   },
   "scripts": {

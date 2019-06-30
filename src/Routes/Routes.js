@@ -31,21 +31,25 @@ const Routes = ({logged}) => (
     /*
       Public pages
      */
+    <Router>
       <Switch>
         <Route path={FORM_CONNECTION_PATH} component={FormConnection} />  
         <Route path={LOST_PASSWORD_PATH}   component={LostPassword} />
         <Route path={AUTHENTIFICATE_PATH}  component={Authentificate} />
         <Route                             component={Login} />
-      </Switch> :
+      </Switch>
+    </Router> :
     /*
     Private pages
     */
+   <Router>
       <Switch>
         <Route path={`${PROFIL_PAGE}/:id`} component={ProfileUser} />
         <Route path={PROFIL_PAGE}          component={ProfilPage} />
         <Route                             component={ProfilPage} />
 
       </Switch>
+    </Router>
 );
 
 export default connect(

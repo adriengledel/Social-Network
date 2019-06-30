@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { socket } from 'Pages/ProfilPage/ProfilPage';
+
 const headers = {
     'Content-Type': 'application/json'
 }
@@ -22,9 +24,11 @@ export default {
         return axios.post(url + '/update');
     },
     friendRequest : function(send){
-        return axios.post(url+ '/friend',send,{headers: headers});
+        /* return axios.post(url+ '/friend',send,{headers: headers}); */
+        return socket.emit("friendRequest", send);
     },
     updateFriendRequest : function(send){
-        return axios.post(url+ '/updatefriend',send,{headers: headers});
+        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
+        return socket.emit("updateFriend", send);
     }
 }

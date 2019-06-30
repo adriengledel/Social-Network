@@ -16,9 +16,9 @@ class App extends Component {
 
     return (
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        {/* <ConnectedRouter history={history}> */}
           <Routes />
-        </ConnectedRouter>
+        {/* </ConnectedRouter> */}
       </Provider>
     );
   }

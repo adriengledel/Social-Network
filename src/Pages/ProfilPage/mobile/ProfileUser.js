@@ -15,7 +15,7 @@ import { status } from 'constants/status';
 const Container = styled.div`
   display        : flex;
   flex-direction : column;
-  margin-top : 50px;
+  margin-top     : 50px;
 `;
 
 const Head = styled.div`
@@ -29,39 +29,39 @@ const ContainerAvatar = styled.div`
 
 const AvatarProfil = styled(Avatar)`
   text-align : center;
-  height : 80px;
-  width : 80px;
+  height     : 80px;
+  width      : 80px;
 `;
 
 const Informations = styled.div`
-  display        : flex;
-  flex-direction : column;
+  display         : flex;
+  flex-direction  : column;
   justify-content : flex-start;
 `;
 
 const Row = styled.div`
-  display       : flex;
-  flex-drection : row;
+  display         : flex;
+  flex-drection   : row;
   justify-content : space-between;
-  margin-top : 10px;
+  margin-top      : 10px;
 `;
 
 const ContainerButton = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : row;
-  margin-top : 10px;
+  margin-top     : 10px;
 `;
 
 const Status = styled.div`
-  padding : 10px 20px;
+  padding          : 10px 20px;
   background-color : ${colors.blueElectron};
-  border-radius : 5px;
-  cursor : pointer;
+  border-radius    : 5px;
+  cursor           : pointer;
 `;
 
 const Wall = styled.div`
-  flex : 1;
-  border-radius : 5px;
+  flex             : 1;
+  border-radius    : 5px;
   background-color : ${colors.backgroundHighLight};
 `;
 
@@ -73,15 +73,17 @@ class ProfileUser extends React.Component{
   }
   
   handleClickRequestFriend(){
-    const { id, user } = this.props;
+    const { location, user } = this.props;
+    const id = location.pathname.split('/')[2];
     this.props.friendRequest(user._id, id, 2, 4);
   }
   
 
   render(){
-    const { users, id, user, friends } = this.props;
-    const userProfil = users[id];
-    const myFriends = friends.filter(friend => friend.id === user._id);
+    const { users, user, friends, location } = this.props;
+    const id = location.pathname.split('/')[2];
+    const userProfil = id ? users[id] : '';
+    const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
     return(
       <LandingPage>
@@ -133,10 +135,9 @@ class ProfileUser extends React.Component{
 
 export default connect( 
   state => ({
-    user  : state.data.user,
-    users : state.data.users,
-    id : state.router.location.pathname.split('/')[2],
-    friends : state.friends.friends
+    user  : state.user,
+    users : state.users,
+    friends : state.friends
   }), 
   {
     friendRequest

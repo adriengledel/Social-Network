@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import API from 'utils/API';
 
 const Container = styled.div`
     height: 32px;
@@ -65,6 +65,7 @@ class MenuButton extends React.Component {
     
     handleClick(){
     this.setState({open:!this.state.open});
+    API.logout();
     }
     
     render(){

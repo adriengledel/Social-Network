@@ -3,26 +3,27 @@ import { userReducer } from './reducers/userReducer';
 import { friendsReducer } from './reducers/friends';
 import { composeReducers, createReducer } from './composer';
 import { connectRouter } from 'connected-react-router'
+import { initState } from './reducers/initState';
 
 export const createRootReducer = (history) => combineReducers({
   router: connectRouter(history),
   data : userReducer,
-  friends :  friendsReducer
+  friends : friendsReducer
 })
 
 
 const rootReducer = combineReducers({
-  user : userReducer
+  user : userReducer,
 })
 
 const reducers = [
-  createReducer(userReducer)
+  createReducer(userReducer),
+  createReducer(friendsReducer),
+  createReducer(initState)
 ]
 
-const getRootReducer = () => {
+export const getRootReducer = () => {
  /*  rootReducerRetrieved = true; */
 
   return composeReducers(reducers);
 }
-
-export { getRootReducer };

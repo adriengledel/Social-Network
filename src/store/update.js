@@ -1,4 +1,4 @@
-import { loadUsers } from 'store/actions/user';
+import { loadUsers } from 'store/actions/auth';
 import { loadFriends } from 'store/actions/friends';
 
 import API from 'utils/API';

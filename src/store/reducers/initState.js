@@ -1,20 +1,19 @@
-export const userReducer = (state={}, action) => {
+const initialState = {
+  users: JSON.parse(localStorage.getItem('users')),
+  user: JSON.parse(localStorage.getItem('user')),
+  friends: JSON.parse(localStorage.getItem('friends'))
+};
+export const initState = (state=initialState, action) => {
   switch(action.type){
-    case 'INITIALE_STATE' : 
+    case 'LOAD_INIT_STATE' : 
     console.log('reducer add user');
     return {
       ...state,
       user : action.user,
-      users : action.users
+      users : action.users,
+      friends : action.friends
     };
 
-    case 'LOGIN_REQUESTED' : 
-    console.log('reducer login');
-    return {
-      ...state,
-      user : action.user,
-    };
-    
     default : return state;
     
   }

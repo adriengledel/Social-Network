@@ -10,6 +10,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const reduxRouterMiddleware = routerMiddleware(history);
 const middleware = [thunk, reduxRouterMiddleware];
 
-const store = createStore(createRootReducer(history), composeEnhancer(applyMiddleware(...middleware)));
+const store = createStore(getRootReducer(), composeEnhancer(applyMiddleware(...middleware)));
+
 
 export default store;

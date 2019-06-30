@@ -9,18 +9,20 @@ import { updateFriendRequest } from 'store/actions/friends';
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
-var socket;
+export var socket = socketIOClient('http://localhost:8000/');
 
 const Container = styled.div`
   height : 100%;
 `;
+
+
 
 class ProfilPage extends React.Component{
   constructor(props){
     super(props);
     this.handleAcceptRequest      = this.handleAcceptRequest.bind(this);
     this.handleIgnoreRequest      = this.handleIgnoreRequest.bind(this);
-    socket = socketIOClient('http://localhost:8000/');
+    /* socket = socketIOClient('http://localhost:8000/'); */
   }
 
   componentDidMount(){
@@ -55,9 +57,9 @@ class ProfilPage extends React.Component{
 
 
 export default connect( state => ({
-  users : state.data.users,
-  user  : state.data.user,
-  friends : state.friends.friends
+  users : state.users,
+  user  : state.user,
+  friends : state.friends
 }), {
   updateDatas,
   updateFriendRequest

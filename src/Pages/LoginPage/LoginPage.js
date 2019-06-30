@@ -12,7 +12,7 @@ import LoginForm   from './LoginForm';
 import HeaderMenu from 'components/common/HeaderMenu';
 import Matrix from 'components/common/Matrix';
 
-import {loginRequested} from 'store/actions/user';
+import {loginRequested} from 'store/actions/auth';
 
 
 
