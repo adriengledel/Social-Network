@@ -61,7 +61,27 @@ class ProfilPageMobile extends React.Component{
   render(){
     const { users, user, friends, accepteRequest, ignoreRequest } = this.props;
     const usersItems = Object.values(users);
-    const filteredItems = usersItems.filter(
+    const myFriends = friends.filter( friend => friend.id === user._id)[0].userId;
+    console.log(myFriends)
+    let test = [];
+    const filteredUser = usersItems.filter( (userItem) => userItem._id !== user._id );
+    const filteredFriends = filteredUser.filter( userItem =>{ 
+      for(let i = 0; i < myFriends.length; i++){
+        if(userItem._id === myFriends[i].id){
+          test.push('exist');
+        }
+      }
+      if(test.length >= 1){
+        test = [];
+        return false;
+      }
+      else{
+        test = [];
+        return true;
+      } 
+    });
+    
+    const filteredItems = filteredFriends.filter(
       item => item.firstName.toLowerCase().includes(this.state.filter.trim().toLowerCase()) || 
               item.lastName.toLowerCase().includes(this.state.filter.trim().toLowerCase())
     );
@@ -70,7 +90,7 @@ class ProfilPageMobile extends React.Component{
         <Container>
           <Head>
             <User to={`profil/${user._id}`}>
-              <Avatar user={user} /> 
+              <Avatar user={user} />  
               {user.pseudo}
             </User>
             <SwitchContainer>
