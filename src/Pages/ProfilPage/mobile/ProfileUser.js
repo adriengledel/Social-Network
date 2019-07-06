@@ -6,6 +6,7 @@ import LandingPage from 'components/common/LandingPage';
 import Avatar      from 'components/common/Avatar';
 import Info        from 'components/common/Info';
 import InputSearchList from 'components/common/InputSearchList';
+import ButtonList  from 'components/common/ButtonList';
 
 import { colors } from 'styles';
 
@@ -49,10 +50,18 @@ const Row = styled.div`
 const ContainerButton = styled.div`
   display        : flex;
   flex-direction : row;
+  justify-content: space-around;
   margin-top     : 10px;
 `;
 
 const Status = styled.div`
+  padding          : 10px 20px;
+  background-color : ${colors.blueElectron};
+  border-radius    : 5px;
+  cursor           : pointer;
+`;
+
+const Recommend = styled.div`
   padding          : 10px 20px;
   background-color : ${colors.blueElectron};
   border-radius    : 5px;
@@ -73,9 +82,10 @@ class ProfileUser extends React.Component{
   }
   
   handleClickRequestFriend(){
-    const { location, user } = this.props;
+    const { location, user, users } = this.props;
     const id = location.pathname.split('/')[2];
-    this.props.friendRequest(user._id, id, 2, 4);
+    const email = users[id].email;
+    this.props.friendRequest(user._id, id, 2, 4, email);
   }
   
 
@@ -84,7 +94,9 @@ class ProfileUser extends React.Component{
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
+    const myFriendsConfirmed = myFriends[0].userId.filter(friend => friend.statusId === 3);
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
+    console.log(friendProfil);
     return(
       <LandingPage>
         <Container>
@@ -115,10 +127,21 @@ class ProfileUser extends React.Component{
             <Status onClick={this.handleClickRequestFriend}>
               {
                 friendProfil.length >= 1 ?
-                status[friendProfil[0].statusId].status :
-                status[1].status
+                status[friendProfil[0].statusId].name :
+                status[1].name
               }
             </Status>
+            {
+              friendProfil.length >= 1 && friendProfil[0].statusId === 3 ?
+            <Recommend>
+              Recommander
+            </Recommend> : null
+            }
+            <ButtonList
+              placeholder="Recommander"
+              items={myFriendsConfirmed}
+              users={users}
+            />
             </ContainerButton>
             <InputSearchList 
               placeholder="Liste d'amis"

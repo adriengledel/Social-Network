@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import SwitchButton from 'components/common/SwitchButton';
 import InputSearch  from 'components/common/InputSearch';
 
-
 const Container = styled.div`
   flex           : 1;
   display        : flex;
@@ -53,6 +52,7 @@ class FriendsList extends React.Component{
     const friendsConfirmed = allFriends.filter(friend => friend.statusId === 3);
     const waitingForConfirmation = allFriends.filter(friend => friend.statusId === 2);
     const requestReceived = allFriends.filter(friend => friend.statusId === 5);
+    const recommendReceived = allFriends.filter(friend => friend.statusId === 6);
 
     return(
       <Container className={className}>
@@ -62,7 +62,8 @@ class FriendsList extends React.Component{
                 items={[
                   {value : 'amis', name : 'Amis'},
                   {value : 'attente', name : 'En attente de confirmation'},
-                  {value : 'demande reçu', name : 'Demande reçu'}
+                  {value : 'demande reçu', name : 'Demande reçu'},
+                  {value : 'recommandation', name : 'Recommandation'}
                 ]}
                 value={this.state.view}
                 onSelect={this.handleViewChange}
@@ -98,7 +99,18 @@ class FriendsList extends React.Component{
               buttons
               onClickLeft={accepteRequest}
               onClickRight={ignoreRequest}
-            /> : null
+            /> : 
+            <InputSearch
+              key='demande reçu'
+              showList={true}
+              items={recommendReceived}
+              onChange={this.handleSearch}
+              users={users}
+              userId={user._id}
+              buttons
+              onClickLeft={accepteRequest}
+              onClickRight={ignoreRequest}
+            /> 
           }
         </Content>
       </Container>

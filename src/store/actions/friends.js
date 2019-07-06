@@ -2,10 +2,10 @@
 import API from 'utils/API';
 import { socket } from 'Pages/ProfilPage/ProfilPage';
 
-export const friendRequest = (userIdSender, userIdRecipient, statusIdSender, statusIdRecipient) => {
+export const friendRequest = (userIdSender, userIdRecipient, statusIdSender, statusIdRecipient, email) => {
   console.log(userIdSender)
   return (dispatch, getState) => {
-    API.friendRequest({userIdSender, userIdRecipient, statusIdSender, statusIdRecipient});
+    API.friendRequest({userIdSender, userIdRecipient, statusIdSender, statusIdRecipient, email});
     socket.on('friendsData', (friends) =>{
       console.log(friends)
       localStorage.setItem('friends', JSON.stringify(friends));
