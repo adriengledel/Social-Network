@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import socketIOClient from "socket.io-client";
 
 import { updateDatas } from 'store/update';
-import { updateFriendRequest } from 'store/actions/friends';
+import { updateFriendRequest, validRecommendRequest } from 'store/actions/friends';
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
@@ -22,6 +22,9 @@ class ProfilPage extends React.Component{
     super(props);
     this.handleAcceptRequest      = this.handleAcceptRequest.bind(this);
     this.handleIgnoreRequest      = this.handleIgnoreRequest.bind(this);
+    this.handleClickValidRecommendFriend   = this.handleClickValidRecommendFriend.bind(this); 
+    this.handleClickIgnoreRecommendFriend   = this.handleClickIgnoreRecommendFriend.bind(this); 
+
     /* socket = socketIOClient('http://localhost:8000/'); */
   }
 
@@ -39,6 +42,21 @@ class ProfilPage extends React.Component{
     const { user } = this.props;
     this.props.updateFriendRequest(user._id, friendId, 4, 4);
   }
+
+  handleClickValidRecommendFriend(id){
+    const { user, users } = this.props;
+    const email = users[id].email;
+    this.props.validRecommendRequest(user._id, id, 2, 5, email);
+  }
+
+  handleClickIgnoreRecommendFriend(id){
+    const { user, users } = this.props;
+    const email = users[id].email;
+    this.props.validRecommendRequest(user._id, id, 4, 4, email);
+  }
+
+  handleClick
+
   render(){
     const { users, user, friends } = this.props;
     return(
@@ -49,6 +67,8 @@ class ProfilPage extends React.Component{
           friends={friends}
           accepteRequest={this.handleAcceptRequest}
           ignoreRequest={this.handleIgnoreRequest}
+          valideRecommendRequest={this.handleClickRequestFriend}
+          ignoreRecommendRequest={this.handleClickIgnoreRecommendFriend}
         />
       </Container>
     );
@@ -62,5 +82,6 @@ export default connect( state => ({
   friends : state.friends
 }), {
   updateDatas,
-  updateFriendRequest
+  updateFriendRequest,
+  validRecommendRequest
 })(ProfilPage);

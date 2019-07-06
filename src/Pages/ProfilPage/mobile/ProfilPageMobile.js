@@ -59,9 +59,9 @@ class ProfilPageMobile extends React.Component{
   }
 
   render(){
-    const { users, user, friends, accepteRequest, ignoreRequest } = this.props;
+    const { users, user, friends, accepteRequest, ignoreRequest, valideRecommendRequest, ignoreRecommendRequest } = this.props;
     const usersItems = Object.values(users);
-    const myFriends = friends.filter( friend => friend.id === user._id)[0].userId;
+    const myFriends = (friends.filter( friend => friend.id === user._id)[0] || []).userId || [];
     console.log(myFriends)
     let test = [];
     const filteredUser = usersItems.filter( (userItem) => userItem._id !== user._id );
@@ -117,6 +117,8 @@ class ProfilPageMobile extends React.Component{
               friends={friends}
               accepteRequest={accepteRequest}
               ignoreRequest={ignoreRequest}
+              valideRecommendRequest={valideRecommendRequest}
+              ignoreRecommendRequest={ignoreRecommendRequest}
             />
           </Content>
         </Container>

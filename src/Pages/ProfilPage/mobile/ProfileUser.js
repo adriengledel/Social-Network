@@ -10,7 +10,7 @@ import ButtonList  from 'components/common/ButtonList';
 
 import { colors } from 'styles';
 
-import { friendRequest } from 'store/actions/friends';
+import { friendRequest, recommendRequest } from 'store/actions/friends';
 import { status } from 'constants/status';
 
 const Container = styled.div`
@@ -77,7 +77,8 @@ const Wall = styled.div`
 class ProfileUser extends React.Component{
   constructor(props){
     super(props);
-    this.handleClickRequestFriend = this.handleClickRequestFriend.bind(this); 
+    this.handleClickRequestFriend   = this.handleClickRequestFriend.bind(this); 
+    this.handleClickRecommendFriend = this.handleClickRecommendFriend.bind(this); 
     
   }
   
@@ -87,6 +88,13 @@ class ProfileUser extends React.Component{
     const email = users[id].email;
     this.props.friendRequest(user._id, id, 2, 4, email);
   }
+
+  handleClickRecommendFriend(idRecommend){
+    const { location, user, users } = this.props;
+    const id = location.pathname.split('/')[2];
+    const email = users[id].email;
+    this.props.recommendRequest(user._id, id, idRecommend, 6, email);
+  }
   
 
   render(){
@@ -94,7 +102,7 @@ class ProfileUser extends React.Component{
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
-    const myFriendsConfirmed = myFriends[0].userId.filter(friend => friend.statusId === 3);
+    const myFriendsConfirmed = ((myFriends[0] || []).userId || []).filter(friend => friend.statusId === 3);
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
     console.log(friendProfil);
     return(
@@ -141,6 +149,7 @@ class ProfileUser extends React.Component{
               placeholder="Recommander"
               items={myFriendsConfirmed}
               users={users}
+              onClick={this.handleClickRecommendFriend}
             />
             </ContainerButton>
             <InputSearchList 
@@ -163,6 +172,7 @@ export default connect(
     friends : state.friends
   }), 
   {
-    friendRequest
+    friendRequest,
+    recommendRequest
   }
 )(ProfileUser);

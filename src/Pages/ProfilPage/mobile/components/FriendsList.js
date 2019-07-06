@@ -45,7 +45,7 @@ class FriendsList extends React.Component{
   }
 
   render(){
-    const { className, user, users, friends = [], accepteRequest, ignoreRequest } = this.props;
+    const { className, user, users, friends = [], accepteRequest, ignoreRequest, valideRecommendRequest, ignoreRecommendRequest } = this.props;
 
     const friendsItems = friends.filter(item => item.id === user._id);
     const allFriends = friendsItems.length >= 1 ? friendsItems[0].userId : [];
@@ -53,7 +53,8 @@ class FriendsList extends React.Component{
     const waitingForConfirmation = allFriends.filter(friend => friend.statusId === 2);
     const requestReceived = allFriends.filter(friend => friend.statusId === 5);
     const recommendReceived = allFriends.filter(friend => friend.statusId === 6);
-
+    const ignored = allFriends.filter(friend => friend.statusId === 4);
+    console.log(recommendReceived)
     return(
       <Container className={className}>
         <Head>
@@ -63,7 +64,8 @@ class FriendsList extends React.Component{
                   {value : 'amis', name : 'Amis'},
                   {value : 'attente', name : 'En attente de confirmation'},
                   {value : 'demande reçu', name : 'Demande reçu'},
-                  {value : 'recommandation', name : 'Recommandation'}
+                  {value : 'recommandation', name : 'Recommandation'},
+                  {value : 'demande refusée', name : 'Demande refusée'}
                 ]}
                 value={this.state.view}
                 onSelect={this.handleViewChange}
@@ -99,7 +101,8 @@ class FriendsList extends React.Component{
               buttons
               onClickLeft={accepteRequest}
               onClickRight={ignoreRequest}
-            /> : 
+            /> :
+            this.state.view === 'recommandation' ?
             <InputSearch
               key='demande reçu'
               showList={true}
@@ -108,9 +111,17 @@ class FriendsList extends React.Component{
               users={users}
               userId={user._id}
               buttons
-              onClickLeft={accepteRequest}
-              onClickRight={ignoreRequest}
-            /> 
+              onClickLeft={valideRecommendRequest}
+              onClickRight={ignoreRecommendRequest}
+            /> :
+            <InputSearch
+              key='recommandation'
+              showList={true}
+              items={ignored}
+              onChange={this.handleSearch}
+              users={users}
+              userId={user._id}
+            />  
           }
         </Content>
       </Container>

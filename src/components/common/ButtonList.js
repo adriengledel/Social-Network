@@ -92,39 +92,19 @@ const Arrow = styled.img`
   flex : 0;
 `;
 
-const DefaultListItemContent = styled.div.attrs(({selected}) => ({
-  style : selected ? {
-    fontWeight : 500
-  } : {}
-}))``;
-
-const DefaultListItem = ({item, selected}) => <DefaultListItemContent selected={selected}>{item.name}</DefaultListItemContent>;
-const DefaultButtonElement = ({value}) => <span>{value.name}</span>;
-
-class Select extends React.Component {
+class ButtonList extends React.Component {
   render() {
     const {
-      ButtonElement = DefaultButtonElement,
-      DropDownElement = DefaultListItem,
-      onSelect,
-      value = null,
       items = [],
       users,
-      placeholder = '',
-      biggerItem,
       id,
-      headerList,
-      error,
-      drawer,
-      openModal,
       className,
-      dataTestId
+      onClick
     } = this.props;
-    console.log(items)
-    const selected = items.find(item => item.value === value) || {name : placeholder};
+
     const handleSelect = (value) => {
       this.buttonReference && this.buttonReference.close();
-      onSelect(value);
+      onClick(value);
     }
 
     return (
@@ -133,7 +113,6 @@ class Select extends React.Component {
       ButtonElement={
         <Button
           id={id}
-          error={error}
           className={className}
           >
             <div>Recommander</div>
@@ -146,7 +125,7 @@ class Select extends React.Component {
                 items.map(
                   item =>
                     <Item key={item.value} >
-                     <RowUser user={users[item.id]}/>
+                     <RowUser noLink onClick={()=>handleSelect(item.id)} user={users[item.id]}/>
                     </Item>
                 )
               }
@@ -158,4 +137,4 @@ class Select extends React.Component {
 }
 
 
-export default Select;
+export default ButtonList;

@@ -30,5 +30,14 @@ export default {
     updateFriendRequest : function(send){
         /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
         return socket.emit("updateFriend", send);
+    },
+    recommendFriendRequest : function(send){
+        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
+        return socket.emit("recommendFriend", send);
+    },
+    validRecommendFriendRequest : function(send){
+        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
+        return socket.emit("validRecommendFriend", send);
     }
+
 }

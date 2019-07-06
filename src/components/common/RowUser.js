@@ -83,10 +83,25 @@ const Button = styled.div`
 
 class RowUser extends React.Component{
   render(){
-    const { user={}, buttons, onClickLeft, onClickRight, userId } = this.props;
+    const { user={}, buttons, onClickLeft, onClickRight, userId, onClick, noLink } = this.props;
 
     return(
-      <Container>
+      <Container onClick={onClick}>
+        {
+          noLink ?
+          <Left>
+          {
+            user.avatarUrl ?
+              <Avatar src={user.avatarUrl || ''}/> :
+              <UserWithoutAvatar >
+                {(user.firstName   || ' ')[0].toUpperCase()}
+                {(user.lastName  || ' ')[0].toUpperCase()}
+            </UserWithoutAvatar>
+          }
+          <Name>
+            {user.firstName} {user.lastName}
+          </Name>
+        </Left> :
         <Left to={`profil/${user._id}`}>
           {
             user.avatarUrl ?
@@ -100,13 +115,14 @@ class RowUser extends React.Component{
             {user.firstName} {user.lastName}
           </Name>
         </Left>
+        }
         <Right>
           <LightConnect connect={user.logged}/>
             {
               buttons ?
               <ContainerButton>
                 <Button onClick={() => onClickLeft(user._id)}>Accepter</Button>
-                <Button onClick={onClickRight}>Ignorer</Button>
+                <Button onClick={()=>onClickRight(user._id)}>Ignorer</Button>
               </ContainerButton> : null
             }
         </Right>

@@ -11,14 +11,6 @@ export const friendRequest = (userIdSender, userIdRecipient, statusIdSender, sta
       localStorage.setItem('friends', JSON.stringify(friends));
       dispatch(loadFriends(friends));
     });
-    /* return API.friendRequest({userIdSender, userIdRecipient, statusIdSender, statusIdRecipient}).then(res => {
-      console.log(res.data.friends)
-      localStorage.setItem('friends', JSON.stringify(res.data.friends));
-      dispatch(loadFriends(res.data.friends));
-    })
-    .catch(err => {
-      console.log('errueru ');
-    }); */
   };
 }
 
@@ -30,14 +22,29 @@ export const updateFriendRequest = (userIdSender, userIdRecipient, statusIdSende
       localStorage.setItem('friends', JSON.stringify(friends));
       dispatch(loadFriends(friends));
     });
-    /* return API.updateFriendRequest({userIdSender, userIdRecipient, statusIdSender, statusIdRecipient}).then(res => {
-      console.log(res.data.friends)
-      localStorage.setItem('friends', JSON.stringify(res.data.friends));
-      dispatch(loadFriends(res.data.friends));
-    })
-    .catch(err => {
-      console.log('errueru ');
-    }); */
+  };
+}
+
+export const recommendRequest = (userIdSender, userIdRecipient, userIdRecommend, statusId, email) => {
+  return (dispatch, getState) => {
+    API.recommendFriendRequest({userIdSender, userIdRecipient, userIdRecommend, statusId, email});
+    socket.on('friendsData', (friends) =>{
+      console.log(friends)
+      localStorage.setItem('friends', JSON.stringify(friends));
+      dispatch(loadFriends(friends));
+    });
+  };
+}
+
+export const validRecommendRequest = (userIdSender, userIdRecipient, statusIdSender, statusIdRecipient, email) => {
+  console.log(userIdSender)
+  return (dispatch, getState) => {
+    API.validRecommendFriendRequest({userIdSender, userIdRecipient, statusIdSender, statusIdRecipient, email});
+    socket.on('friendsData', (friends) =>{
+      console.log(friends)
+      localStorage.setItem('friends', JSON.stringify(friends));
+      dispatch(loadFriends(friends));
+    });
   };
 }
 
