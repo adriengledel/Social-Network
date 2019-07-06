@@ -24,20 +24,19 @@ export default {
         return axios.post(url + '/update');
     },
     friendRequest : function(send){
-        /* return axios.post(url+ '/friend',send,{headers: headers}); */
         return socket.emit("friendRequest", send);
     },
     updateFriendRequest : function(send){
-        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
         return socket.emit("updateFriend", send);
     },
     recommendFriendRequest : function(send){
-        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
         return socket.emit("recommendFriend", send);
     },
     validRecommendFriendRequest : function(send){
-        /* return axios.post(url+ '/updatefriend',send,{headers: headers}); */
         return socket.emit("validRecommendFriend", send);
+    },
+    messageRequest : function(send){
+        return socket.emit("messageRequest", send);
     }
 
 }

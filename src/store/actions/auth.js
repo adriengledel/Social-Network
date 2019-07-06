@@ -8,7 +8,8 @@ export const loginRequested = (data) => {
       localStorage.setItem('users', JSON.stringify(res.data.users));
       localStorage.setItem('user', JSON.stringify(res.data.user));
       localStorage.setItem('friends', JSON.stringify(res.data.friends));
-      dispatch(initState(res.data.user, res.data.users, res.data.friends));
+      localStorage.setItem('messages', JSON.stringify(res.data.messages));
+      dispatch(initState(res.data.user, res.data.users, res.data.friends, res.data.messages));
     })
     .catch(err => {
       console.log(err);
@@ -27,10 +28,11 @@ export const loginRequested = (data) => {
     users
   });
 
-  const initState = (user, users, friends) => ({
+  const initState = (user, users, friends, messages) => ({
     type : 'LOAD_INIT_STATE',
     user,
     users,
-    friends
+    friends,
+    messages
   })
   
