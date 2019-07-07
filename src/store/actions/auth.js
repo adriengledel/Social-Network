@@ -4,12 +4,13 @@ export const loginRequested = (data) => {
   return (dispatch, getState) => {
 
      API.login(data).then(res => {
+       console.log('res', res)
       localStorage.setItem('itemName', JSON.stringify(res.data.token));
       localStorage.setItem('users', JSON.stringify(res.data.users));
       localStorage.setItem('user', JSON.stringify(res.data.user));
       localStorage.setItem('friends', JSON.stringify(res.data.friends));
-      localStorage.setItem('messages', JSON.stringify(res.data.messages));
-      dispatch(initState(res.data.user, res.data.users, res.data.friends, res.data.messages));
+      localStorage.setItem('walls', JSON.stringify(res.data.walls));
+      dispatch(initState(res.data.user, res.data.users, res.data.friends, res.data.walls));
     })
     .catch(err => {
       console.log(err);
@@ -28,11 +29,11 @@ export const loginRequested = (data) => {
     users
   });
 
-  const initState = (user, users, friends, messages) => ({
+  const initState = (user, users, friends, walls) => ({
     type : 'LOAD_INIT_STATE',
     user,
     users,
     friends,
-    messages
+    walls
   })
   

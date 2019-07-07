@@ -1,7 +1,11 @@
 const initialState = {
-  friends: JSON.parse(localStorage.getItem('friends'))
+  users    : JSON.parse(localStorage.getItem('users')),
+  user     : JSON.parse(localStorage.getItem('user')),
+  friends  : JSON.parse(localStorage.getItem('friends')),
+  walls    : JSON.parse(localStorage.getItem('walls'))
 };
-export const friendsReducer = (state={}, action) => {
+
+export const friendsReducer = (state=initialState, action) => {
   switch(action.type){
     case 'LOAD_FRIENDS' :
     return {
@@ -9,7 +13,7 @@ export const friendsReducer = (state={}, action) => {
       friends : action.friends,
     };
 
-    default : console.log(state) /* return state; */
+    default : return state;
     
   }
 }

@@ -123,9 +123,9 @@ class ButtonList extends React.Component {
             <List>
               {
                 items.map(
-                  item =>
-                    <Item key={item.value} >
-                     <RowUser noLink onClick={()=>handleSelect(item.id)} user={users[item.id]}/>
+                  (item, index) =>
+                    <Item key={index} >
+                     <RowUser key={index} noLink onClick={()=>handleSelect(item.id)} user={users[item.id]}/>
                     </Item>
                 )
               }

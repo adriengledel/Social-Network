@@ -2,15 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import LandingPage from 'components/common/LandingPage';
-import Avatar      from 'components/common/Avatar';
-import Info        from 'components/common/Info';
+import LandingPage     from 'components/common/LandingPage';
+import Avatar          from 'components/common/Avatar';
+import Info            from 'components/common/Info';
 import InputSearchList from 'components/common/InputSearchList';
-import ButtonList  from 'components/common/ButtonList';
+import ButtonList      from 'components/common/ButtonList';
+import WallMessage     from './components/WallMessage';
 
 import { colors } from 'styles';
 
 import { friendRequest, recommendRequest } from 'store/actions/friends';
+import { messageRequest, deleteMessage, responseRequest, deleteResponse } from 'store/actions/walls';
 import { status } from 'constants/status';
 
 const Container = styled.div`
@@ -74,12 +76,37 @@ const Wall = styled.div`
   background-color : ${colors.backgroundHighLight};
 `;
 
+const ZoneText = styled.div`
+  display : flex;
+  flex-direction : row;
+`;
+
+const TextArea = styled.textarea`
+  width : 100%;
+`;
+
+const PublishButton = styled.div`
+  width : 70px;
+  background-color : red;
+`;
+
+const Messages = styled.div``;
+
 class ProfileUser extends React.Component{
   constructor(props){
     super(props);
+    this.state = {
+      message : '',
+      response : ''
+    }
     this.handleClickRequestFriend   = this.handleClickRequestFriend.bind(this); 
     this.handleClickRecommendFriend = this.handleClickRecommendFriend.bind(this); 
-    
+    this.handleSendMessage          = this.handleSendMessage.bind(this); 
+    this.handleMessageChange        = this.handleMessageChange.bind(this);
+    this.handleDeleteMessage        = this.handleDeleteMessage.bind(this);
+    this.handleResponseChange       = this.handleResponseChange.bind(this);
+    this.handleSendResponse         = this.handleSendResponse.bind(this);
+    this.handleDeleteResponse       = this.handleDeleteResponse.bind(this);
   }
   
   handleClickRequestFriend(){
@@ -96,15 +123,44 @@ class ProfileUser extends React.Component{
     this.props.recommendRequest(user._id, id, idRecommend, 6, email);
   }
   
+  handleSendMessage(){
+    const { user, location, users, walls={} } = this.props;
+    const id = location.pathname.split('/')[2];
+    const email = users[id].email;
+    const messageId = ((walls[id] || {}).messages || []).length+1;
+    this.props.messageRequest(user._id, id, this.state.message, messageId, email);
+  }
+
+  handleMessageChange(event){
+    this.setState({ message : event.target.value });
+  }
+
+  handleDeleteMessage(user, messageId){
+    this.props.deleteMessage(user, messageId);
+  }
+
+  handleResponseChange(event){
+    this.setState({ response : event.target.value });
+  }
+
+  handleSendResponse(userId, messageId, subMessageId){
+    const { user, users } = this.props;
+    const email = users[userId].email;
+    this.props.responseRequest(user._id, userId, this.state.response, messageId, subMessageId, email);
+  }
+
+  handleDeleteResponse(user, messageId, subMessageId){
+    this.props.deleteResponse(user, messageId, subMessageId);
+  }
 
   render(){
-    const { users, user, friends, location } = this.props;
+    const { users, user, friends, location, walls={} } = this.props;
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
     const myFriendsConfirmed = ((myFriends[0] || []).userId || []).filter(friend => friend.statusId === 3);
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
-    console.log(friendProfil);
+    const myMessages = ((walls || [])[id] || []).messages || [];
     return(
       <LandingPage>
         <Container>
@@ -157,7 +213,31 @@ class ProfileUser extends React.Component{
             />
           </Head>
           <Wall>
-
+            <ZoneText>
+              <TextArea 
+                onChange={this.handleMessageChange}
+                value={this.state.message}
+              />
+              <PublishButton onClick={this.handleSendMessage}>Envoyer</PublishButton>
+            </ZoneText>
+            <Messages>
+              {
+                myMessages.map((message, index) => 
+                  <WallMessage
+                  key={index}
+                  walls={walls} 
+                  message={message} 
+                  users={users}
+                  user={userProfil}
+                  deleteMessage={this.handleDeleteMessage}
+                  value={this.state.value}
+                  onChange={this.handleResponseChange}
+                  sendResponse={this.handleSendResponse}
+                  deleteResponse={this.handleDeleteResponse}
+                  />
+                )
+              }
+            </Messages>
           </Wall>
         </Container>
       </LandingPage>
@@ -167,12 +247,17 @@ class ProfileUser extends React.Component{
 
 export default connect( 
   state => ({
-    user  : state.user,
-    users : state.users,
-    friends : state.friends
+    user    : state.user,
+    users   : state.users,
+    friends : state.friends,
+    walls   : state.walls
   }), 
   {
     friendRequest,
-    recommendRequest
+    recommendRequest,
+    messageRequest,
+    deleteMessage,
+    responseRequest,
+    deleteResponse
   }
 )(ProfileUser);

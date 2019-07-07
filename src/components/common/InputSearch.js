@@ -68,6 +68,7 @@ class InputSearch extends React.Component{
 
   render(){
     const { items=[], onChange, placeholder, users, userId, buttons, onClickLeft, onClickRight } = this.props;
+    console.log(items);
     return(
       <Container>
         <ContainerInput  onBlur={this.handleFocusInput}>
@@ -85,9 +86,9 @@ class InputSearch extends React.Component{
           <List>
             {
               buttons ?
-              items.map(item => 
+              items.map((item, index) => 
               <RowUser 
-                key={item._id} 
+                key={index} 
                 user={users[item.id]} 
                 buttons 
                 onClickLeft={onClickLeft}
