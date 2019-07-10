@@ -46,6 +46,9 @@ export default {
     },
     deleteResponse : function(send){
         return socket.emit("deleteResponse", send);
+    },
+    sendPrivateMessage : function(send){
+        return socket.emit("room", send);
     }
 
 }

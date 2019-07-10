@@ -2,12 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Widget } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
 
-import SwitchButton from 'components/common/SwitchButton';
-import LandingPage from 'components/common/LandingPage';
+
+import SwitchButton    from 'components/common/SwitchButton';
+import LandingPage     from 'components/common/LandingPage';
 import InputSearchList from 'components/common/InputSearchList';
-import FriendsList from './components/FriendsList';
-import Avatar      from 'components/common/Avatar';
+import FriendsList     from './components/FriendsList';
+import Avatar          from 'components/common/Avatar';
+import Forum           from './components/Forum';
 
 import { colors } from 'styles';
 
@@ -62,7 +66,7 @@ class ProfilPageMobile extends React.Component{
     const { users, user, friends, accepteRequest, ignoreRequest, valideRecommendRequest, ignoreRecommendRequest } = this.props;
     const usersItems = Object.values(users);
     const myFriends = (friends.filter( friend => friend.id === user._id)[0] || []).userId || [];
-    console.log(myFriends)
+    const myFriendsConfirmed = myFriends.filter(friend => friend.statusId === 3);
     let test = [];
     const filteredUser = usersItems.filter( (userItem) => userItem._id !== user._id );
     const filteredFriends = filteredUser.filter( userItem =>{ 
@@ -111,15 +115,23 @@ class ProfilPageMobile extends React.Component{
             />
           </Head>
           <Content>
-            <FriendsList
-              user={user} 
-              users={users}
-              friends={friends}
-              accepteRequest={accepteRequest}
-              ignoreRequest={ignoreRequest}
-              valideRecommendRequest={valideRecommendRequest}
-              ignoreRecommendRequest={ignoreRecommendRequest}
-            />
+            {
+              this.state.value === 'test' ?
+              <FriendsList
+                user={user} 
+                users={users}
+                friends={friends}
+                accepteRequest={accepteRequest}
+                ignoreRequest={ignoreRequest}
+                valideRecommendRequest={valideRecommendRequest}
+                ignoreRecommendRequest={ignoreRecommendRequest}
+              /> :
+              this.state.value === 'test2' ?
+              <Forum 
+                friends={myFriendsConfirmed}
+                users={users}
+              /> : null
+            }
           </Content>
         </Container>
       </LandingPage>

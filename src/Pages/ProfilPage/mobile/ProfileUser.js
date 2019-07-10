@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Widget } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
+
 
 import LandingPage     from 'components/common/LandingPage';
 import Avatar          from 'components/common/Avatar';
@@ -97,7 +100,8 @@ class ProfileUser extends React.Component{
     super(props);
     this.state = {
       message : '',
-      response : ''
+      response : '',
+      connect : 'en attente de connection'
     }
     this.handleClickRequestFriend   = this.handleClickRequestFriend.bind(this); 
     this.handleClickRecommendFriend = this.handleClickRecommendFriend.bind(this); 
@@ -151,6 +155,11 @@ class ProfileUser extends React.Component{
 
   handleDeleteResponse(user, messageId, subMessageId){
     this.props.deleteResponse(user, messageId, subMessageId);
+  }
+
+  handleNewUserMessage = (newMessage) => {
+    console.log(`New message incomig! ${newMessage}`);
+    // Now send the message throught the backend API
   }
 
   render(){
@@ -238,6 +247,11 @@ class ProfileUser extends React.Component{
                 )
               }
             </Messages>
+            <Widget 
+              title="Messagerie Privée"	
+              handleNewUserMessage={this.handleNewUserMessage}
+              subtitle={this.state.connect}
+            />
           </Wall>
         </Container>
       </LandingPage>
