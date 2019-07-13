@@ -6,12 +6,12 @@ const initialState = {
   topics   : JSON.parse(localStorage.getItem('topics'))
 };
 
-export const wallsReducer = (state=initialState, action) => {
+export const topicsReducer = (state=initialState, action) => {
   switch(action.type){
-    case 'LOAD_WALLS' :
+    case 'LOAD_TOPICS' :
     return {
       ...state,
-      walls : action.walls
+      topics : action.topics,
     };
 
     default : return state;

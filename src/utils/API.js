@@ -49,6 +49,15 @@ export default {
     },
     sendPrivateMessage : function(send){
         return socket.emit("room", send);
-    }
+    },
+    createTopic : function(send){
+        return socket.emit("createTopic", send);
+    },
+    deleteTopic : function(send){
+        return socket.emit("deleteTopic", send);
+    },
+    addFriendToTopic : function(send){
+        return socket.emit("addFriendToTopic", send);
+    },
 
 }

@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import { userReducer } from './reducers/userReducer';
 import { friendsReducer } from './reducers/friends';
 import { wallsReducer } from './reducers/walls';
+import { topicsReducer } from './reducers/topics';
 import { composeReducers, createReducer } from './composer';
 import { connectRouter } from 'connected-react-router'
 import { initState } from './reducers/initState';
@@ -21,7 +22,8 @@ const reducers = [
   createReducer(initState),
   createReducer(userReducer),
   createReducer(wallsReducer),
-  createReducer(friendsReducer)
+  createReducer(friendsReducer),
+  createReducer(topicsReducer)
 ]
 
 export const getRootReducer = () => {

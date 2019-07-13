@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { colors } from 'styles';
 
+import AddButtonPng from 'components/img/add-button.png';
+
 const Container = styled.div`
   display         : flex;
   flex-direction  : row;
@@ -81,9 +83,14 @@ const Button = styled.div`
   border-radius: 3px;
 `;
 
+const AddButton = styled.img`
+  width : 20px;
+  height : 20px;
+`;
+
 class RowUser extends React.Component{
   render(){
-    const { user={}, buttons, onClickLeft, onClickRight, userId, onClick, noLink } = this.props;
+    const { user={}, buttons, onClickLeft, onClickRight, userId, onClick, noLink, addButton, onClickAdd } = this.props;
 
     return(
       <Container onClick={onClick}>
@@ -123,6 +130,15 @@ class RowUser extends React.Component{
               <ContainerButton>
                 <Button onClick={() => onClickLeft(user._id)}>Accepter</Button>
                 <Button onClick={()=>onClickRight(user._id)}>Ignorer</Button>
+              </ContainerButton> : null
+            }
+            {
+              addButton ?
+              <ContainerButton>
+                <AddButton 
+                  src={AddButtonPng}
+                  onClick={onClickAdd} 
+                />
               </ContainerButton> : null
             }
         </Right>
