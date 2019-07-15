@@ -59,5 +59,14 @@ export default {
     addFriendToTopic : function(send){
         return socket.emit("addFriendToTopic", send);
     },
+    joinTopic : function(send){
+        return socket.emit("room", send);
+    },
+    messageTopic : function(send){
+        return socket.emit("messageTopic", send);
+    },
+    deleteMessageTopic : function(send){
+        return socket.emit("room", send);
+    },
 
 }

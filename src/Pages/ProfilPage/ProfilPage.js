@@ -7,6 +7,8 @@ import socketIOClient from "socket.io-client";
 import { updateDatas } from 'store/update';
 import { updateFriendRequest, validRecommendRequest } from 'store/actions/friends';
 
+import { loadTopics } from 'store/actions/topics';
+
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
 export var socket = socketIOClient('http://localhost:8000/');
@@ -58,6 +60,11 @@ class ProfilPage extends React.Component{
   handleClick
 
   render(){
+    socket.on('topicsData', (datas) =>{
+      console.log(datas)
+      localStorage.setItem('topics', JSON.stringify(datas));
+      this.props.loadTopics(datas);
+    });
     const { users, user, friends } = this.props;
     return(
       <Container>
@@ -83,5 +90,6 @@ export default connect( state => ({
 }), {
   updateDatas,
   updateFriendRequest,
-  validRecommendRequest
+  validRecommendRequest,
+  loadTopics
 })(ProfilPage);

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { socket } from 'Pages/ProfilPage/ProfilPage';
 
 import RowUser from 'components/common/RowUser';
 
@@ -10,8 +11,7 @@ import CrossPng       from 'components/img/delete.png';
 
 import { colors, shadows } from 'styles';
 
-import { createTopic, deleteTopic, addFriendToTopic } from 'store/actions/topics';
-import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
+import { createTopic, deleteTopic, addFriendToTopic, joinTopic, messageTopic, deleteMessageTopic } from 'store/actions/topics';
 
 const Container = styled.div`
   display        : flex;
@@ -71,7 +71,9 @@ const ChatTopic = styled.div`
 
 `;
 
-const ChatMessage = styled.div``;
+const ChatMessage = styled.div`
+  color : white;
+`;
 
 const Head = styled.div`
   border         : 1px solid white;
@@ -111,10 +113,11 @@ class Forum extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      messages  : ['test'],
+      messages  : [],
       showInput : false,
       topic     : '',
-      topicId   : ''
+      topicId   : '',
+      message   : '' 
     }
     this.handleClickAddTopic    = this.handleClickAddTopic.bind(this);
     this.handleCreateTopic      = this.handleCreateTopic.bind(this);
@@ -122,11 +125,25 @@ class Forum extends React.Component{
     this.handleDeleteTopic      = this.handleDeleteTopic.bind(this);
     this.handleAddFriendToTopic = this.handleAddFriendToTopic.bind(this);
     this.handleClickTopic       = this.handleClickTopic.bind(this);
+    this.handleJoinRoom         = this.handleJoinRoom.bind(this);
+    this.handleChangeMessage    = this.handleChangeMessage.bind(this);
+    this.handleSendMessage      = this.handleSendMessage.bind(this);
   }
 
   componentWillMount(){
     const { topics } = this.props;
-    this.setState({ topicId : topics[0].topicId})
+    this.setState({ 
+      topicId  : (topics[0] || []).topicId,
+      messages : (topics[0] || []).messages,
+    })
+  }
+
+  componentWillReceiveProps(){
+    const { topics } = this.props;
+    this.setState({ 
+      topicId  : (topics[0] || []).topicId,
+      messages : (topics[0] || []).messages,
+    })
   }
 
   handleClickAddTopic(event){
@@ -155,36 +172,63 @@ class Forum extends React.Component{
 
   handleDeleteTopic(topicId){
     this.props.deleteTopic(topicId);
+    this.setState({ topicId : ''});
   }
 
   handleAddFriendToTopic(userId){
     this.props.addFriendToTopic(this.state.topicId, userId);
   }
 
+  handleJoinRoom(){
+    const { user } = this.props;
+    this.props.joinTopic(this.state.topicId, user._id);
+  }
+
+  handleChangeMessage(event){
+    this.setState({message : event.target.value});
+  }
+
+  handleSendMessage(){
+    const { user } = this.props;
+    this.props.messageTopic(this.state.topicId, user._id, 1 , this.state.message);
+  }
+
   render(){
     const {friends=[], topics=[], users=[], user } = this.props;
     const adminTopics = topics.filter(topic => topic.adminTopicId === user._id);
-    let tab = [];
+    let invited = [];
     const inviteTopics = topics.forEach(topic => {
         topic.inviteId.forEach(invite => {
           if(invite.id === user._id){
-            tab.push(topic);
+            invited.push(topic);
           }
       });
     });
-    const myTopics = [...adminTopics, ...tab];
+    let confirmed = [];
+    const confirmTopics = topics.forEach(topic => {
+      topic.confirmId.forEach(confirm => {
+        if(confirm.id === user._id){
+          confirmed.push(topic);
+        }
+      });
+    });
+    const myTopics = [...adminTopics, ...invited, ...confirmed];
     const currentTopic = myTopics.filter(topic => topic.topicId === this.state.topicId);
-    let testTab = [];
+    let testinvite = [];
     let test = () => {
       console.log('ok')
       for(let i = 0; i<currentTopic[0].inviteId.length; i++){
         console.log(currentTopic[0].inviteId[i].id)
         if(currentTopic[0].inviteId[i].id === user._id){
-          testTab.push(currentTopic[0].inviteId[i].id);
+          testinvite.push(currentTopic[0].inviteId[i].id);
         }
       }
     }
-    console.log(tab)
+    socket.on('message', (data) => {
+      console.log(data)
+      this.setState({ messages : [...this.state.messages, data]})
+    
+    })
     return(
       <Container>
         <Left>
@@ -216,13 +260,19 @@ class Forum extends React.Component{
           </Head>
           <Body>
             {
-              tab.length > 0 ?
-              <div>rejoindre</div> :
-              this.state.messages.map(message => <ChatMessage />)
+              invited.length > 0 ?
+              <div onClick={this.handleJoinRoom}>rejoindre</div> :
+              (this.state.messages || []).map(message => <ChatMessage>{message.message}</ChatMessage>)
             }
           </Body>
           <Footer>
-            <Input />
+          <AddTopic>
+            <Input 
+            placeholder="Saisi le message"
+            onChange={this.handleChangeMessage}
+            />
+            <AddButton onClick={this.handleSendMessage} src={ValidButtonPng}/> 
+          </AddTopic>
           </Footer>
         </Right>
       </Container>
@@ -237,6 +287,9 @@ export default connect(state => ({
 { 
   createTopic,
   deleteTopic,
-  addFriendToTopic
+  addFriendToTopic,
+  joinTopic,
+  messageTopic,
+  deleteMessageTopic
  }
 )(Forum);
