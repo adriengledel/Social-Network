@@ -22,6 +22,11 @@ const Container = styled.div`
 class ProfilPage extends React.Component{
   constructor(props){
     super(props);
+
+    this.state = {
+      messages : this.props.topics
+    }
+
     this.handleAcceptRequest      = this.handleAcceptRequest.bind(this);
     this.handleIgnoreRequest      = this.handleIgnoreRequest.bind(this);
     this.handleClickValidRecommendFriend   = this.handleClickValidRecommendFriend.bind(this); 
@@ -64,6 +69,7 @@ class ProfilPage extends React.Component{
       console.log(datas)
       localStorage.setItem('topics', JSON.stringify(datas));
       this.props.loadTopics(datas);
+      this.setState({messages : datas});
     });
     const { users, user, friends } = this.props;
     return(
@@ -76,6 +82,7 @@ class ProfilPage extends React.Component{
           ignoreRequest={this.handleIgnoreRequest}
           valideRecommendRequest={this.handleClickRequestFriend}
           ignoreRecommendRequest={this.handleClickIgnoreRecommendFriend}
+          messages={this.state.messages}
         />
       </Container>
     );
@@ -86,7 +93,8 @@ class ProfilPage extends React.Component{
 export default connect( state => ({
   users : state.users,
   user  : state.user,
-  friends : state.friends
+  friends : state.friends,
+  topics  : state.topics
 }), {
   updateDatas,
   updateFriendRequest,

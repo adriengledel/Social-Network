@@ -11,7 +11,7 @@ import CrossPng       from 'components/img/delete.png';
 
 import { colors, shadows } from 'styles';
 
-import { createTopic, deleteTopic, addFriendToTopic, joinTopic, messageTopic, deleteMessageTopic } from 'store/actions/topics';
+import { createTopic, deleteTopic, addFriendToTopic, joinTopic, messageTopic, deleteMessageTopic, loadTopics } from 'store/actions/topics';
 
 const Container = styled.div`
   display        : flex;
@@ -72,7 +72,12 @@ const ChatTopic = styled.div`
 `;
 
 const ChatMessage = styled.div`
-  color : white;
+  color            : white;
+  padding          : 10px;
+  background-color : ${colors.blueElectron};
+  border-radius    : 4px;
+  margin-bottom    : 8px;
+  margin-right     : 15px;
 `;
 
 const Head = styled.div`
@@ -85,6 +90,10 @@ const Head = styled.div`
 const Body = styled.div`
   border         : 1px solid white;
   flex           : 1;
+  display        : flex;
+  flex-direction : column;
+  align-items    : flex-end;
+  overflow       : auto;
 `;
 
 const Footer = styled.div`
@@ -113,11 +122,12 @@ class Forum extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      messages  : [],
+      messages  : (this.props.topics[0] || []).messages,
       showInput : false,
       topic     : '',
       topicId   : '',
-      message   : '' 
+      message   : '',
+      index     : 0 
     }
     this.handleClickAddTopic    = this.handleClickAddTopic.bind(this);
     this.handleCreateTopic      = this.handleCreateTopic.bind(this);
@@ -128,21 +138,20 @@ class Forum extends React.Component{
     this.handleJoinRoom         = this.handleJoinRoom.bind(this);
     this.handleChangeMessage    = this.handleChangeMessage.bind(this);
     this.handleSendMessage      = this.handleSendMessage.bind(this);
+
+    socket.on('topicsData', (datas) =>{
+      console.log(datas)
+      localStorage.setItem('topics', JSON.stringify(datas));
+      this.props.loadTopics(datas);
+      this.setState({messages : datas});
+    });
   }
 
   componentWillMount(){
-    const { topics } = this.props;
+    const { topics, messages } = this.props;
+    console.log(messages)
     this.setState({ 
       topicId  : (topics[0] || []).topicId,
-      messages : (topics[0] || []).messages,
-    })
-  }
-
-  componentWillReceiveProps(){
-    const { topics } = this.props;
-    this.setState({ 
-      topicId  : (topics[0] || []).topicId,
-      messages : (topics[0] || []).messages,
     })
   }
 
@@ -151,13 +160,15 @@ class Forum extends React.Component{
   }
 
   handleChangeTopic(event){
+    event.preventDefault();
     this.setState({ topic : event.target.value})
   }
 
-  handleClickTopic(topicId){
+  handleClickTopic(topicId, index){
     this.setState({
       showInput : false,
-      topicId   : topicId
+      topicId   : topicId,
+      index
     });
   }
 
@@ -171,8 +182,9 @@ class Forum extends React.Component{
   }
 
   handleDeleteTopic(topicId){
+    const { topics } = this.props;
     this.props.deleteTopic(topicId);
-    this.setState({ topicId : ''});
+    this.setState({ topicId :  (topics[0] || []).topicId,});
   }
 
   handleAddFriendToTopic(userId){
@@ -193,8 +205,11 @@ class Forum extends React.Component{
     this.props.messageTopic(this.state.topicId, user._id, 1 , this.state.message);
   }
 
+  
+
   render(){
-    const {friends=[], topics=[], users=[], user } = this.props;
+    const {friends=[], topics=[], users=[], user, messages } = this.props;
+    console.log(messages)
     const adminTopics = topics.filter(topic => topic.adminTopicId === user._id);
     let invited = [];
     const inviteTopics = topics.forEach(topic => {
@@ -224,11 +239,7 @@ class Forum extends React.Component{
         }
       }
     }
-    socket.on('message', (data) => {
-      console.log(data)
-      this.setState({ messages : [...this.state.messages, data]})
-    
-    })
+   
     return(
       <Container>
         <Left>
@@ -255,14 +266,26 @@ class Forum extends React.Component{
         <Right>
           <Head>
             {
-              myTopics.map(topic => <ChatTopic onClick={()=>this.handleClickTopic(topic.topicId)}>{topic.topic}<DeleteTopic onClick={() => this.handleDeleteTopic(topic.topicId)} src={CrossPng}/></ChatTopic>)
+              myTopics.map((topic, index) => 
+              <ChatTopic 
+                onClick={()=>this.handleClickTopic(topic.topicId, index)}
+              >
+                {topic.topic}
+                {
+                  topic.adminTopicId === user._id ?
+                  <DeleteTopic 
+                    onClick={() => this.handleDeleteTopic(topic.topicId)} 
+                    src={CrossPng}
+                  /> : null
+                }
+              </ChatTopic>)
             }
           </Head>
           <Body>
             {
               invited.length > 0 ?
               <div onClick={this.handleJoinRoom}>rejoindre</div> :
-              (this.state.messages || []).map(message => <ChatMessage>{message.message}</ChatMessage>)
+              ((topics.filter(topic => this.state.topicId === topic.topicId)[0] || []).messages || []).map(message => <ChatMessage>{message.message}</ChatMessage>)
             }
           </Body>
           <Footer>
@@ -290,6 +313,7 @@ export default connect(state => ({
   addFriendToTopic,
   joinTopic,
   messageTopic,
-  deleteMessageTopic
+  deleteMessageTopic,
+  loadTopics
  }
 )(Forum);

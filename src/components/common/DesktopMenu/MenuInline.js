@@ -75,10 +75,9 @@ class LoginHeader extends React.Component {
            
           </LeftElements>
           <RightElements>
-            <ButtonHeader href="#">Solutions</ButtonHeader>
-            <ButtonHeader href="#">Log In</ButtonHeader>
-            <ButtonFreeTrial href="#">Start Free trial</ButtonFreeTrial>
-            <Language>En</Language>
+            <ButtonHeader href="#">test</ButtonHeader>
+            <ButtonHeader href="#">test</ButtonHeader>
+            <ButtonFreeTrial href="#">test</ButtonFreeTrial>
           </RightElements>
         </Header>
     )
