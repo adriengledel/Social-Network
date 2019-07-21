@@ -4,29 +4,34 @@ import styled from 'styled-components';
 import SearchImgPng from 'components/img/icon-search.png';
 import RowUser      from 'components/common/RowUser';
 
-import { colors } from 'styles';
+import { colors, shadows } from 'styles';
 
 const Container = styled.div`
-  width : 100%;
-  border-bottom : 1px solid black;
-  display : flex;
-  flex-direction : column;
+  display         : flex;
+  flex-direction  : column;
   justify-content : center;
-  margin-top : 15px;
+  position        : relative;
+  width           : 100%;
+  border-bottom   : 1px solid white;
+  color           : white;
+  margin-top      : 15px;
+  border-radius   : 4px;
 `;
 
 const ContainerInput = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : row;
-  align-items : center;
+  align-items    : center;
 `;
   
 const Input = styled.input`
-  border  : none;
-  width   : 100%;
-  outline : none;
-  height  : 30px;
+  border           : none;
+  width            : 100%;
+  outline          : none;
+  height           : 30px;
   background-color : ${colors.background};
+  color            : white;
+  caret-color      : white;
 `;
 
 const SearchImg = styled.img`
@@ -39,16 +44,16 @@ const ContainerList = styled.div``;
 
 const List = styled.div`
   position : absolute;
-  width : 90%;
-  top : 163px;
-  height : 300px;
+  width    : 100%;
+  height   : 300px;
   overflow : auto;
+  border-radius : 4px;
+  box-shadow :  2px 3px 2px 1px rgba(255,255,255,0.35);
 `;
 
 const ListFriends = styled.div``;
 
 const Row = styled.div`
-
 `;
 
 class InputSearch extends React.Component{
@@ -79,10 +84,10 @@ class InputSearch extends React.Component{
             onChange={onChange}
           />
         </ContainerInput>
-        <ContainerList  onBlur={this.handleFocusInput}>
+        <ContainerList>
         {
           this.state.showList ?
-            <List>
+            <List onBlur={this.handleFocusInput}>
               {
                 items.map(item => <RowUser key={item._id} user={item}/> )
               }

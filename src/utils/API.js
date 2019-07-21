@@ -66,7 +66,13 @@ export default {
         return socket.emit("messageTopic", send);
     },
     deleteMessageTopic : function(send){
-        return socket.emit("room", send);
+        return socket.emit("deleteMessageTopic", send);
     },
+    leaveTopic : function(send){
+        return socket.emit("leaveTopic", send);
+    },
+    connectTopic : function(send){
+        return socket.emit("connectTopic", send);
+    }
 
 }

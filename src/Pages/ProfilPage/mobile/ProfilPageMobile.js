@@ -32,6 +32,7 @@ const Content = styled.div`
 const SwitchContainer = styled.div`
   height      : 50px;
   font-weight : 450;
+  color       : white;
 `;
 
 const User = styled(Link)`

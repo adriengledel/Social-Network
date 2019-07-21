@@ -7,18 +7,18 @@ import RowUser      from 'components/common/RowUser';
 import { colors } from 'styles';
 
 const Container = styled.div`
-  width : 100%;
-  border-bottom : 1px solid black;
-  display : flex;
-  flex-direction : column;
+  width           : 100%;
+  border-bottom   : 1px solid black;
+  display         : flex;
+  flex-direction  : column;
   justify-content : center;
-  margin-top : 15px;
+  margin-top      : 15px;
 `;
 
 const ContainerInput = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : row;
-  align-items : center;
+  align-items    : center;
 `;
   
 const Input = styled.input`
@@ -38,8 +38,8 @@ const SearchImg = styled.img`
 const ContainerList = styled.div``;
 
 const List = styled.div`
-  width : 100%;
-  height : 300px;
+  width    : 100%;
+  height   : 300px;
   overflow : auto;
 `;
 

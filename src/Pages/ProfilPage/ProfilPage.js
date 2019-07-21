@@ -33,6 +33,12 @@ class ProfilPage extends React.Component{
     this.handleClickIgnoreRecommendFriend   = this.handleClickIgnoreRecommendFriend.bind(this); 
 
     /* socket = socketIOClient('http://localhost:8000/'); */
+    socket.on('topicsData', (datas) =>{
+      console.log(datas)
+      localStorage.setItem('topics', JSON.stringify(datas));
+      this.props.loadTopics(datas);
+      /* this.setState({messages : datas}); */
+    });
   }
 
   componentDidMount(){
@@ -65,12 +71,6 @@ class ProfilPage extends React.Component{
   handleClick
 
   render(){
-    socket.on('topicsData', (datas) =>{
-      console.log(datas)
-      localStorage.setItem('topics', JSON.stringify(datas));
-      this.props.loadTopics(datas);
-      this.setState({messages : datas});
-    });
     const { users, user, friends } = this.props;
     return(
       <Container>
