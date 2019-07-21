@@ -76,7 +76,6 @@ const Recommend = styled.div`
 const Wall = styled.div`
   flex             : 1;
   border-radius    : 5px;
-  background-color : ${colors.backgroundHighLight};
 `;
 
 const ZoneText = styled.div`
@@ -147,10 +146,11 @@ class ProfileUser extends React.Component{
     this.setState({ response : event.target.value });
   }
 
-  handleSendResponse(userId, messageId, subMessageId){
-    const { user, users } = this.props;
-    const email = users[userId].email;
-    this.props.responseRequest(user._id, userId, this.state.response, messageId, subMessageId, email);
+  handleSendResponse(senderId, recipientId, messageId, subMessageId){
+    const { user, users, location } = this.props;
+    const id = location.pathname.split('/')[2];
+    const email = users[recipientId].email;
+    this.props.responseRequest(id, senderId, recipientId, this.state.response, messageId, subMessageId, email);
   }
 
   handleDeleteResponse(user, messageId, subMessageId){
@@ -206,29 +206,29 @@ class ProfileUser extends React.Component{
             </Status>
             {
               friendProfil.length >= 1 && friendProfil[0].statusId === 3 ?
-            <Recommend>
-              Recommander
-            </Recommend> : null
+                <ButtonList
+                  placeholder="Recommander"
+                  items={myFriendsConfirmed}
+                  users={users}
+                  onClick={this.handleClickRecommendFriend}
+                />: null
             }
-            <ButtonList
-              placeholder="Recommander"
-              items={myFriendsConfirmed}
-              users={users}
-              onClick={this.handleClickRecommendFriend}
-            />
             </ContainerButton>
             <InputSearchList 
               placeholder="Liste d'amis"
             />
           </Head>
           <Wall>
-            <ZoneText>
-              <TextArea 
-                onChange={this.handleMessageChange}
-                value={this.state.message}
-              />
-              <PublishButton onClick={this.handleSendMessage}>Envoyer</PublishButton>
-            </ZoneText>
+            {
+              user.role === "admin" || user._id === id || (status[(friendProfil[0] || []).statusId] || []).name === "Ami" ?
+                <ZoneText>
+                  <TextArea 
+                    onChange={this.handleMessageChange}
+                    value={this.state.message}
+                  />
+                  <PublishButton onClick={this.handleSendMessage}>Envoyer</PublishButton>
+                </ZoneText> : null
+            }
             <Messages>
               {
                 myMessages.map((message, index) => 

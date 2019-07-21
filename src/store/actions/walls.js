@@ -23,9 +23,9 @@ export const deleteMessage = (userIdRecipient, messageId) => {
   };
 }
 
-export const responseRequest = (userIdSender, userIdRecipient, message, messageId, subMessageId, email) => {
+export const responseRequest = (wallId, userIdSender, userIdRecipient, message, messageId, subMessageId, email) => {
   return (dispatch, getState) => {
-    API.responseRequest({userIdSender, userIdRecipient, message, messageId, subMessageId, email});
+    API.responseRequest({wallId, userIdSender, userIdRecipient, message, messageId, subMessageId, email});
     socket.on('wallsData', (walls) =>{
       console.log(walls)
       localStorage.setItem('walls', JSON.stringify(walls));

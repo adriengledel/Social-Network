@@ -44,6 +44,7 @@ class ProfilPage extends React.Component{
   componentDidMount(){
     this.props.updateDatas();
   }
+  
  
   handleAcceptRequest(friendId){
     console.log('accept', friendId)
