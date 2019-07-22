@@ -73,6 +73,9 @@ export default {
     },
     connectTopic : function(send){
         return socket.emit("connectTopic", send);
+    },
+    updateUser : function(send){
+        return socket.emit("updateUser", send);
     }
 
 }

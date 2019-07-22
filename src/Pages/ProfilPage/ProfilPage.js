@@ -8,6 +8,7 @@ import { updateDatas } from 'store/update';
 import { updateFriendRequest, validRecommendRequest } from 'store/actions/friends';
 
 import { loadTopics } from 'store/actions/topics';
+import { updateUsers }  from 'store/actions/users'
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
@@ -37,6 +38,13 @@ class ProfilPage extends React.Component{
       console.log(datas)
       localStorage.setItem('topics', JSON.stringify(datas));
       this.props.loadTopics(datas);
+      /* this.setState({messages : datas}); */
+    });
+
+    socket.on('updateUsers', (datas) =>{
+      console.log(datas)
+      localStorage.setItem('topics', JSON.stringify(datas));
+      this.props.updateUsers(datas);
       /* this.setState({messages : datas}); */
     });
   }
@@ -100,5 +108,6 @@ export default connect( state => ({
   updateDatas,
   updateFriendRequest,
   validRecommendRequest,
-  loadTopics
+  loadTopics,
+  updateUsers
 })(ProfilPage);

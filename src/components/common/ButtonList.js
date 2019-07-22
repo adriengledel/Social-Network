@@ -53,6 +53,7 @@ const List = styled.div`
   box-shadow      : ${shadows.buttonShadow};
   z-index         : 10;
   border-radius   : 5px;
+  font-size       : 16px;
 `;
 
 const HeadItem = styled.div`

@@ -45,10 +45,10 @@ const ContainerList = styled.div``;
 const List = styled.div`
   position : absolute;
   width    : 100%;
-  height   : 300px;
+  max-height   : 300px;
   overflow : auto;
   border-radius : 4px;
-  box-shadow :  2px 3px 2px 1px rgba(255,255,255,0.35);
+
 `;
 
 const ListFriends = styled.div``;

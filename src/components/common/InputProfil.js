@@ -11,32 +11,31 @@ const Container = styled.div`
 
 const Label = styled.div`
   font-size     : ${typography.medium}em;
-  color         : ${colors.yellowElectron};
+  color         : white;
   text-align    : left;
   margin-bottom : 3px;
 `;
 
-const Information = styled.div`
+const Information = styled.input`
   font-size        : ${typography.medium}em;
-  background-color :  ${colors.blueLightElectron};
+  background-color : ${colors.blueLightElectron};
   color            : ${colors.background};
   border-radius    : 5px;
   padding          : 5px 10px; 
+  outline          : none;
+  width            : 50%;
 `;
 
 class Info extends React.Component{
   render(){
-    const { label } = this.props;
+    const { label, value, onChange } = this.props;
     return(
       <Container>
-        {
-          this.props.children ?
-            <>
-            <Label>{label}</Label>
-            <Information>
-              {this.props.children}
-            </Information> </> : null
-        }
+        <Label>{label}</Label>
+        <Information
+          value={value}
+          onChange={onChange} 
+        />
       </Container>
     );
   }

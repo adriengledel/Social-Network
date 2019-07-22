@@ -13,19 +13,19 @@ const InputBox = styled.input.attrs(({disabled, wrongValue, error, sizeInputBig}
 
     }
 }))`
-  min-width : 50px;
-  margin: 0;
-  border: 1px solid ${colors.bordersInput};
-  border-radius: 4px;
-  padding: 2%;
-  display: inline-block;
-  vertical-align: middle;
-  white-space: normal;
-  background: white;
-  line-height: 2;
-  font-size : ${typography.medium}em;
-  overflow: initial;
-  caret-color : ${colors.buttonLogin};
+  min-width      : 50px;
+  margin         : 0;
+  border         : 1px solid ${colors.bordersInput};
+  border-radius  : 4px;
+  padding        : 2%;
+  display        : inline-block;
+  vertical-align : middle;
+  white-space    : normal;
+  background     : white;
+  line-height    : 2;
+  font-size      : ${typography.medium}em;
+  overflow       : initial;
+  caret-color    : ${colors.buttonLogin};
 
   :focus {
     outline : none;
@@ -35,9 +35,9 @@ const InputBox = styled.input.attrs(({disabled, wrongValue, error, sizeInputBig}
 `;
 
 const InputContainer = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : column;
-  width : 100%
+  width          : 100%
 `;
 
 const Label = styled.label.attrs(({mediumSizeLabel, darkLabel})=> ({
@@ -46,17 +46,18 @@ const Label = styled.label.attrs(({mediumSizeLabel, darkLabel})=> ({
         color : darkLabel ? colors.darkBlue : colors.textColorHeadTable
   } 
 }))`
-  margin-top : 4%;
+  margin-top    : 4%;
   margin-bottom : 10px;
+
     @media(max-width : 600px){
         font-size : ${typography.xlarge}em;
     }
 `;
 
 const ErrorMessage = styled.div`
-  color : red;
-  font-size : ${typography.medium}em;
-  margin-top : 10px;
+  color       : red;
+  font-size   : ${typography.medium}em;
+  margin-top  : 10px;
   font-weihgt : 500;
 `;
 

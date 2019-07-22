@@ -8,6 +8,7 @@ import { colors } from 'styles';
 import ArrowPng from 'components/img/play.png';
 import editPng  from 'components/img/edit.png';
 import binPng   from 'components/img/bin.png';
+import { typography } from 'styles';
 
 const Container = styled.div`
   display        : flex;
@@ -49,7 +50,7 @@ const Sender = styled.div``;
 const Recipient = styled.div``;
 
 const Message = styled.div`
-  font-size : 18px;
+  font-size : ${typography.medium}em;
   margin    : 5px 0;
   color     : white;
   font-weight : 500;
@@ -88,6 +89,9 @@ const ZoneText = styled.div`
 
 const TextArea = styled.textarea`
   width : 100%;
+  resize : none;
+  height : 30px;
+  background-color : red;
 `;
 
 const PublishButton = styled.div`

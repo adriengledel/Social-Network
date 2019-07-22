@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Widget } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
+import { socket } from 'Pages/ProfilPage/ProfilPage';
 
 
 import LandingPage     from 'components/common/LandingPage';
@@ -11,17 +12,28 @@ import Info            from 'components/common/Info';
 import InputSearchList from 'components/common/InputSearchList';
 import ButtonList      from 'components/common/ButtonList';
 import WallMessage     from './components/WallMessage';
+import Informations    from './components/Informations';
+
+import EditButtonPng      from 'components/img/edit.png';
+import SaveButtonPng      from 'components/img/save.png';
 
 import { colors } from 'styles';
 
 import { friendRequest, recommendRequest } from 'store/actions/friends';
 import { messageRequest, deleteMessage, responseRequest, deleteResponse } from 'store/actions/walls';
+import { updateUsers }  from 'store/actions/users';
 import { status } from 'constants/status';
+import { typography } from 'styles';
+
+import { updateUser } from 'store/actions/users';
 
 const Container = styled.div`
   display        : flex;
   flex-direction : column;
   margin-top     : 50px;
+  @media(min-width: 1200px) {
+    font-size : ${typography.xlarge}em;
+  }
 `;
 
 const Head = styled.div`
@@ -30,7 +42,10 @@ const Head = styled.div`
 `;
 
 const ContainerAvatar = styled.div`
-  text-align : center;
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  align-items    : center; 
 `;
 
 const AvatarProfil = styled(Avatar)`
@@ -39,24 +54,50 @@ const AvatarProfil = styled(Avatar)`
   width      : 80px;
 `;
 
-const Informations = styled.div`
-  display         : flex;
-  flex-direction  : column;
-  justify-content : flex-start;
+const EditButton = styled.img`
+  width: 5%;
+  max-width: 45px;
 `;
+
+const SaveButton = styled.img`
+  width: 5%;
+  max-width: 45px;
+`;
+
 
 const Row = styled.div`
   display         : flex;
   flex-drection   : row;
   justify-content : space-between;
   margin-top      : 10px;
+
+  @media(min-width: 600px) {
+    width         : 100%;
+  }
+  @media(min-width: 800px) {
+    width         : 80%;
+  }
+  @media(min-width: 1200px) {
+    width         : 40%;
+  }
 `;
 
 const ContainerButton = styled.div`
+  width          : 40%;
   display        : flex;
   flex-direction : row;
-  justify-content: space-around;
-  margin-top     : 10px;
+  justify-content: space-between;
+  margin-top     : 20px;
+
+  @media(max-width: 600px) {
+    width         : 100%;
+  }
+  @media(min-width: 601px) {
+    width         : 80%;
+  }
+  @media(min-width: 1200px) {
+    width         : 40%;
+  }
 `;
 
 const Status = styled.div`
@@ -79,18 +120,64 @@ const Wall = styled.div`
 `;
 
 const ZoneText = styled.div`
-  display : flex;
+  display        : flex;
   flex-direction : row;
+  align-items    : center;
+  border-radius  : 4px;
+  height         : 40px;
+  margin-top     : 10px;
+  margin-bottom  : 10px;
+  overflow       : hidden;
 `;
 
 const TextArea = styled.textarea`
   width : 100%;
+  resize : none;
+  height : 100%;
+  background-color : ${colors.backgroundHighLight};
+  border: none;
+  overflow: auto;
+  outline: none;
+  padding-top: 18px;
+  padding-left: 18px;
+  color : white;
+  caret-color : white;
+  font-size   : 16px;
 `;
 
-const PublishButton = styled.div`
-  width : 70px;
-  background-color : red;
+const Input = styled.input`
+  border           : none;
+  background-color : ${colors.backgroundHighLight};
+  height           : 20px;
+  width            : 40px;
+  color            : white;
+  border-radius    : 4px;
+  border-bottom    : ${colors.redElectron};
 `;
+
+const PublishButton = styled.button`
+  display : flex;
+  flex-direction : row;
+  align-items : center;
+  justify-content : center;
+  width : 80px;
+  height : 94%;
+  color  : white;
+  background-color : ${colors.backgroundHighLight};
+  border : 2px solid white;
+  border-radius : 4px;
+  cursor : pointer;
+  :active {
+    background-color : ${colors.red};
+    color : white;
+  }
+  :hover {
+    color : ${colors.blueElectron};
+    border : 2px solid ${colors.blueElectron};
+    background-color : ${colors.red};
+  }
+  `;
+
 
 const Messages = styled.div``;
 
@@ -98,9 +185,10 @@ class ProfileUser extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      message : '',
+      message  : '',
       response : '',
-      connect : 'en attente de connection'
+      connect  : 'en attente de connection',
+      modify   : false 
     }
     this.handleClickRequestFriend   = this.handleClickRequestFriend.bind(this); 
     this.handleClickRecommendFriend = this.handleClickRecommendFriend.bind(this); 
@@ -110,6 +198,14 @@ class ProfileUser extends React.Component{
     this.handleResponseChange       = this.handleResponseChange.bind(this);
     this.handleSendResponse         = this.handleSendResponse.bind(this);
     this.handleDeleteResponse       = this.handleDeleteResponse.bind(this);
+    this.handleUpdateUser           = this.handleUpdateUser.bind(this);
+
+    socket.on('updateUsers', (datas) =>{
+      console.log(datas)
+      localStorage.setItem('users', JSON.stringify(datas));
+      this.props.updateUsers(datas);
+      /* this.setState({messages : datas}); */
+    });
   }
   
   handleClickRequestFriend(){
@@ -132,6 +228,7 @@ class ProfileUser extends React.Component{
     const email = users[id].email;
     const messageId = ((walls[id] || {}).messages || []).length+1;
     this.props.messageRequest(user._id, id, this.state.message, messageId, email);
+    this.setState({message : ''});
   }
 
   handleMessageChange(event){
@@ -162,40 +259,39 @@ class ProfileUser extends React.Component{
     // Now send the message throught the backend API
   }
 
+  handleUpdateUser(datas){
+    const { location } = this.props;
+    const id = location.pathname.split('/')[2];
+    this.props.updateUser(id, datas);
+    this.setState({modify : false});
+  }
+
   render(){
     const { users, user, friends, location, walls={} } = this.props;
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
+
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
     const myFriendsConfirmed = ((myFriends[0] || []).userId || []).filter(friend => friend.statusId === 3);
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
+
     const myMessages = ((walls || [])[id] || []).messages || [];
+
+    const friendsList = [];
+    const friendsOfProfil = friends.filter(friend => friend.id === id);
+    const friendsOfProfilConfirmed = friendsOfProfil[0].userId.filter(friend => friend.statusId === 3);
+    const friendsFilter = friendsOfProfilConfirmed.forEach(userFriend => friendsList.push(users[userFriend.id]));
+    console.log(friendsOfProfilConfirmed)
     return(
       <LandingPage>
         <Container>
-          <Head>
-            <ContainerAvatar>
-              <AvatarProfil user={userProfil}/>
-            </ContainerAvatar>
-            <Informations>
-              <Row>
-                <Info label="Pseudo">{userProfil.pseudo}</Info>
-                <Info label="Prénom">{userProfil.firstName}</Info>
-                <Info label="Nom">{userProfil.lastName}</Info>
-              </Row>
-              <Row>
-                <Info>{userProfil.email}</Info>
-              </Row>
-              <Row>
-                <Info>{userProfil.genre}</Info>
-                <Info label="Age">{userProfil.age} ans</Info>
-                <Info>{userProfil.preferences}</Info>
-              </Row>
-              <Row>
-                <Info>{userProfil.presentation}</Info>
-                <Info>{userProfil.contactInformation}</Info>
-              </Row>
-            </Informations>
+          <Head> 
+            <Informations 
+              modify={this.state.modify}
+              userProfil={userProfil}
+              update={this.handleUpdateUser}
+              user={user}
+            />
             <ContainerButton>
             <Status onClick={this.handleClickRequestFriend}>
               {
@@ -216,6 +312,7 @@ class ProfileUser extends React.Component{
             </ContainerButton>
             <InputSearchList 
               placeholder="Liste d'amis"
+              items={friendsList}
             />
           </Head>
           <Wall>
@@ -272,6 +369,8 @@ export default connect(
     messageRequest,
     deleteMessage,
     responseRequest,
-    deleteResponse
+    deleteResponse,
+    updateUser,
+    updateUsers
   }
 )(ProfileUser);
