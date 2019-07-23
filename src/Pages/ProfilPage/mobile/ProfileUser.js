@@ -270,17 +270,38 @@ class ProfileUser extends React.Component{
     const { users, user, friends, location, walls={} } = this.props;
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
+    
+    const friendsList = [];
+    const friendsOfProfil = friends.filter(friend => friend.id === id);
+    const friendsOfProfilConfirmed = ((friendsOfProfil[0] || []).userId || []).filter(friend => friend.statusId === 3);
+    const friendsFilter = friendsOfProfilConfirmed.forEach(userFriend => friendsList.push(users[userFriend.id]));
 
+    const recommendList = [];
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
     const myFriendsConfirmed = ((myFriends[0] || []).userId || []).filter(friend => friend.statusId === 3);
+    console.log(myFriendsConfirmed)
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
+    console.log(friendsList)
+    const recommendFilter = myFriendsConfirmed.forEach(friend => {
+      let test = [];
+      console.log(friend)
+      for(let i = 0; i < friendsList.length; i++){
+        if(friend.id === friendsList[i]._id || friend.id === userProfil._id){
+          test.push('ami');
+        }
+      }
+      if(test.length >= 1){
+        test = [];
+      }
+      else{
+        recommendList.push({id :friend.id});
+        test = [];
+      } 
+    });
 
     const myMessages = ((walls || [])[id] || []).messages || [];
 
-    const friendsList = [];
-    const friendsOfProfil = friends.filter(friend => friend.id === id);
-    const friendsOfProfilConfirmed = friendsOfProfil[0].userId.filter(friend => friend.statusId === 3);
-    const friendsFilter = friendsOfProfilConfirmed.forEach(userFriend => friendsList.push(users[userFriend.id]));
+    console.log(recommendList)
     console.log(friendsOfProfilConfirmed)
     return(
       <LandingPage>
@@ -304,7 +325,7 @@ class ProfileUser extends React.Component{
               friendProfil.length >= 1 && friendProfil[0].statusId === 3 ?
                 <ButtonList
                   placeholder="Recommander"
-                  items={myFriendsConfirmed}
+                  items={recommendList}
                   users={users}
                   onClick={this.handleClickRecommendFriend}
                 />: null

@@ -67,7 +67,18 @@ class InputSearch extends React.Component{
   }
 
   render(){
-    const { items=[], onChange, placeholder, users, userId, buttons, onClickLeft, onClickRight } = this.props;
+    const { 
+      items=[], 
+      onChange, 
+      placeholder, 
+      users, 
+      userId, 
+      buttons, 
+      onClickLeft, 
+      onClickRight, 
+      deleteButton,
+      deleteFriend 
+    } = this.props;
     console.log(items);
     return(
       <Container>
@@ -95,7 +106,14 @@ class InputSearch extends React.Component{
                 onClickRight={onClickRight}
                 userId={userId}
                 /> ) :
-              items.map(item => <RowUser key={item._id} user={users[item.id]} />)
+              items.map(item => 
+                <RowUser 
+                  deleteButton={deleteButton} 
+                  key={item._id} 
+                  user={users[item.id]} 
+                  deleteFriend={deleteFriend}
+                  />
+                )
             }
           </List>
         </ContainerList>

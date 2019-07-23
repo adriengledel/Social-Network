@@ -45,7 +45,17 @@ class FriendsList extends React.Component{
   }
 
   render(){
-    const { className, user, users, friends = [], accepteRequest, ignoreRequest, valideRecommendRequest, ignoreRecommendRequest } = this.props;
+    const { 
+      className, 
+      user, 
+      users, 
+      friends = [], 
+      accepteRequest, 
+      ignoreRequest, 
+      valideRecommendRequest, 
+      ignoreRecommendRequest,
+      deleteFriend
+    } = this.props;
 
     const friendsItems = friends.filter(item => item.id === user._id);
     const allFriends = friendsItems.length >= 1 ? friendsItems[0].userId : [];
@@ -81,6 +91,8 @@ class FriendsList extends React.Component{
               items={friendsConfirmed}
               onChange={this.handleSearch}
               users={users}
+              deleteButton
+              deleteFriend={deleteFriend}
             /> :
             this.state.view === 'attente' ?
             <InputSearch
@@ -104,7 +116,7 @@ class FriendsList extends React.Component{
             /> :
             this.state.view === 'recommandation' ?
             <InputSearch
-              key='demande reçu'
+              key='recommandation'
               showList={true}
               items={recommendReceived}
               onChange={this.handleSearch}
@@ -115,12 +127,14 @@ class FriendsList extends React.Component{
               onClickRight={ignoreRecommendRequest}
             /> :
             <InputSearch
-              key='recommandation'
+              key='ignored'
               showList={true}
               items={ignored}
               onChange={this.handleSearch}
               users={users}
               userId={user._id}
+              deleteButton
+              deleteFriend={deleteFriend}
             />  
           }
         </Content>

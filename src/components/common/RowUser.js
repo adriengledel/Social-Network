@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { colors } from 'styles';
 
 import AddButtonPng from 'components/img/add-button.png';
+import DeleteButtonPng from 'components/img/bin.png';
 
 const Container = styled.div`
   display         : flex;
@@ -76,21 +77,52 @@ const ContainerButton = styled.div`
   display        : flex;
   flex-direction : row;
 `;
-const Button = styled.div`
-  border       : 1px solid black;
+const ButtonAccept = styled.div`
+  color        : ${colors.background};
   margin-right : 8px;
   padding      : 2px 5px;
   border-radius: 3px;
+  background-color : ${colors.greenElectron};
+  cursor       : pointer;
+`;
+
+const ButtonIgnore = styled.div`
+  color        : ${colors.background};
+  margin-right : 8px;
+  padding      : 2px 5px;
+  border-radius: 3px;
+  background-color : ${colors.redElectron};
+  cursor       : pointer;
 `;
 
 const AddButton = styled.img`
   width : 20px;
   height : 20px;
+  cursor : pointer;
+`;
+
+const DeleteButton = styled.img`
+  width : 20px;
+  height : 20px;
+  margin-right : 30px;
+  cursor : pointer;
 `;
 
 class RowUser extends React.Component{
   render(){
-    const { user={}, buttons, onClickLeft, onClickRight, userId, onClick, noLink, addButton, onClickAdd } = this.props;
+    const { 
+      user={}, 
+      buttons, 
+      onClickLeft, 
+      onClickRight, 
+      userId, 
+      onClick, 
+      noLink, 
+      addButton, 
+      onClickAdd, 
+      deleteButton, 
+      deleteFriend 
+    } = this.props;
 
     return(
       <Container onClick={onClick}>
@@ -128,16 +160,21 @@ class RowUser extends React.Component{
             {
               buttons ?
               <ContainerButton>
-                <Button onClick={() => onClickLeft(user._id)}>Accepter</Button>
-                <Button onClick={()=>onClickRight(user._id)}>Ignorer</Button>
-              </ContainerButton> : null
-            }
-            {
+                <ButtonAccept onClick={() => onClickLeft(user._id)}>Accepter</ButtonAccept>
+                <ButtonIgnore onClick={()=>onClickRight(user._id)}>Ignorer</ButtonIgnore>
+              </ContainerButton> :
               addButton ?
               <ContainerButton>
                 <AddButton 
                   src={AddButtonPng}
                   onClick={onClickAdd} 
+                />
+              </ContainerButton> : 
+              deleteButton ?
+              <ContainerButton>
+                <DeleteButton 
+                  src={DeleteButtonPng}
+                  onClick={() => deleteFriend(user._id)} 
                 />
               </ContainerButton> : null
             }

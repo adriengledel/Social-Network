@@ -5,10 +5,11 @@ import {connect} from 'react-redux';
 import socketIOClient from "socket.io-client";
 
 import { updateDatas } from 'store/update';
-import { updateFriendRequest, validRecommendRequest } from 'store/actions/friends';
+import { updateFriendRequest, validRecommendRequest, deleteFriend } from 'store/actions/friends';
 
 import { loadTopics } from 'store/actions/topics';
 import { updateUsers }  from 'store/actions/users'
+import { loadFriends } from 'store/actions/friends';
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
@@ -28,10 +29,11 @@ class ProfilPage extends React.Component{
       messages : this.props.topics
     }
 
-    this.handleAcceptRequest      = this.handleAcceptRequest.bind(this);
-    this.handleIgnoreRequest      = this.handleIgnoreRequest.bind(this);
+    this.handleAcceptRequest               = this.handleAcceptRequest.bind(this);
+    this.handleIgnoreRequest               = this.handleIgnoreRequest.bind(this);
     this.handleClickValidRecommendFriend   = this.handleClickValidRecommendFriend.bind(this); 
-    this.handleClickIgnoreRecommendFriend   = this.handleClickIgnoreRecommendFriend.bind(this); 
+    this.handleClickIgnoreRecommendFriend  = this.handleClickIgnoreRecommendFriend.bind(this); 
+    this.handleClickDeleteFriend           = this.handleClickDeleteFriend.bind(this); 
 
     /* socket = socketIOClient('http://localhost:8000/'); */
     socket.on('topicsData', (datas) =>{
@@ -47,6 +49,13 @@ class ProfilPage extends React.Component{
       this.props.updateUsers(datas);
       /* this.setState({messages : datas}); */
     });
+
+    socket.on('friendsData', (friends) =>{
+      console.log(friends)
+      localStorage.setItem('friends', JSON.stringify(friends));
+      this.props.loadFriends(friends);
+    });
+    
   }
 
   componentDidMount(){
@@ -77,7 +86,10 @@ class ProfilPage extends React.Component{
     this.props.validRecommendRequest(user._id, id, 4, 4, email);
   }
 
-  handleClick
+  handleClickDeleteFriend(friendId){
+    const { user } = this.props;
+    this.props.deleteFriend(user._id, friendId);
+  }
 
   render(){
     const { users, user, friends } = this.props;
@@ -89,8 +101,9 @@ class ProfilPage extends React.Component{
           friends={friends}
           accepteRequest={this.handleAcceptRequest}
           ignoreRequest={this.handleIgnoreRequest}
-          valideRecommendRequest={this.handleClickRequestFriend}
+          valideRecommendRequest={this.handleClickValidRecommendFriend}
           ignoreRecommendRequest={this.handleClickIgnoreRecommendFriend}
+          deleteFriend={this.handleClickDeleteFriend}
           messages={this.state.messages}
         />
       </Container>
@@ -108,6 +121,8 @@ export default connect( state => ({
   updateDatas,
   updateFriendRequest,
   validRecommendRequest,
+  deleteFriend,
   loadTopics,
-  updateUsers
+  updateUsers,
+  loadFriends
 })(ProfilPage);

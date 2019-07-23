@@ -35,6 +35,9 @@ export default {
     validRecommendFriendRequest : function(send){
         return socket.emit("validRecommendFriend", send);
     },
+    deleteFriend : function(send){
+        return socket.emit("deleteFriend", send);
+    },
     wallRequest : function(send){
         return socket.emit("messageRequest", send);
     },

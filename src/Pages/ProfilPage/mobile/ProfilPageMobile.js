@@ -36,10 +36,10 @@ const SwitchContainer = styled.div`
 `;
 
 const User = styled(Link)`
-  display : flex;
+  display        : flex;
   flex-direction : row;
-  align-items : center;
-  margin-bottom : 20px;
+  align-items    : center;
+  margin-bottom  : 20px;
   text-decoration : none;
   color : white;
 `;
@@ -64,7 +64,18 @@ class ProfilPageMobile extends React.Component{
   }
 
   render(){
-    const { users, user, friends, accepteRequest, ignoreRequest, valideRecommendRequest, ignoreRecommendRequest, messages } = this.props;
+    const { 
+      users, 
+      user, 
+      friends, 
+      accepteRequest, 
+      ignoreRequest, 
+      valideRecommendRequest, 
+      ignoreRecommendRequest, 
+      messages,
+      deleteFriend 
+    } = this.props;
+    
     const usersItems = Object.values(users);
     const myFriends = (friends.filter( friend => friend.id === user._id)[0] || []).userId || [];
     const myFriendsConfirmed = myFriends.filter(friend => friend.statusId === 3);
@@ -126,6 +137,7 @@ class ProfilPageMobile extends React.Component{
                 ignoreRequest={ignoreRequest}
                 valideRecommendRequest={valideRecommendRequest}
                 ignoreRecommendRequest={ignoreRecommendRequest}
+                deleteFriend={deleteFriend}
               /> :
               this.state.value === 'test2' ?
               <Forum 
