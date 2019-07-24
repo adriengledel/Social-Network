@@ -7,6 +7,10 @@ import { colors } from 'styles';
 import AddButtonPng from 'components/img/add-button.png';
 import DeleteButtonPng from 'components/img/bin.png';
 
+import {
+  PROFIL_USER
+} from 'Routes/Paths.js';
+
 const Container = styled.div`
   display         : flex;
   flex-direction  : row;
@@ -141,7 +145,7 @@ class RowUser extends React.Component{
             {user.firstName} {user.lastName}
           </Name>
         </Left> :
-        <Left to={`profil/${user._id}`}>
+        <Left to={`${PROFIL_USER}/${user._id}`}>
           {
             user.avatarUrl ?
               <Avatar src={user.avatarUrl || ''}/> :

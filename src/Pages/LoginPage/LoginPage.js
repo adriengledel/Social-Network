@@ -17,7 +17,7 @@ import {loginRequested} from 'store/actions/auth';
 
 
 import {
-  AUTHENTIFICATE_PATH
+  PROFIL_PAGE
 } from 'Routes/Paths.js';
 
 import API from 'utils/API';
@@ -65,7 +65,7 @@ class LoginPage extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={AUTHENTIFICATE_PATH}/>;
+      return <Redirect to={PROFIL_PAGE}/>;
     }
     return (
     <Container>

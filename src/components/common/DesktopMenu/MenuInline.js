@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { colors, typography} from 'styles';
+import { Redirect } from 'react-router-dom';
 
-
+import {
+  LOGIN_PAGE_PATH
+} from 'Routes/Paths.js';
 
 const Header = styled.div`
   flex            : 0;  
@@ -68,7 +71,23 @@ const Language = styled.div`
 `;
 
 class LoginHeader extends React.Component {
+  constructor(props){
+    super(props);
+      this.state = {
+        redirect : false
+      }
+    this.handleClickDeconnection = this.handleClickDeconnection.bind(this);
+  }
+
+  handleClickDeconnection(){
+    localStorage.clear();
+    this.setState({redirect : true});
+  }
+
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={LOGIN_PAGE_PATH}/>;
+    }
     return (
         <Header>
           <LeftElements>
@@ -77,7 +96,7 @@ class LoginHeader extends React.Component {
           <RightElements>
             <ButtonHeader href="#">test</ButtonHeader>
             <ButtonHeader href="#">test</ButtonHeader>
-            <ButtonFreeTrial href="#">test</ButtonFreeTrial>
+            <ButtonFreeTrial onClick={this.handleClickDeconnection}>Déconnection</ButtonFreeTrial>
           </RightElements>
         </Header>
     )

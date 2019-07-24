@@ -26,6 +26,7 @@ import { status } from 'constants/status';
 import { typography } from 'styles';
 
 import { updateUser } from 'store/actions/users';
+import { loadFriends } from 'store/actions/friends';
 
 const Container = styled.div`
   display        : flex;
@@ -206,6 +207,11 @@ class ProfileUser extends React.Component{
       this.props.updateUsers(datas);
       /* this.setState({messages : datas}); */
     });
+    socket.on('friendsData', (friends) =>{
+      console.log(friends)
+      localStorage.setItem('friends', JSON.stringify(friends));
+      this.props.loadFriends(friends);
+    });
   }
   
   handleClickRequestFriend(){
@@ -268,6 +274,7 @@ class ProfileUser extends React.Component{
 
   render(){
     const { users, user, friends, location, walls={} } = this.props;
+
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
     
@@ -279,9 +286,7 @@ class ProfileUser extends React.Component{
     const recommendList = [];
     const myFriends = friends ? friends.filter(friend => friend.id === user._id) : [];
     const myFriendsConfirmed = ((myFriends[0] || []).userId || []).filter(friend => friend.statusId === 3);
-    console.log(myFriendsConfirmed)
     const friendProfil = myFriends.length >= 1 ? myFriends[0].userId.filter(friend => friend.id === userProfil._id) : [];
-    console.log(friendsList)
     const recommendFilter = myFriendsConfirmed.forEach(friend => {
       let test = [];
       console.log(friend)
@@ -301,8 +306,6 @@ class ProfileUser extends React.Component{
 
     const myMessages = ((walls || [])[id] || []).messages || [];
 
-    console.log(recommendList)
-    console.log(friendsOfProfilConfirmed)
     return(
       <LandingPage>
         <Container>
@@ -349,6 +352,7 @@ class ProfileUser extends React.Component{
             }
             <Messages>
               {
+                user.role === "admin" || user._id === id || (status[(friendProfil[0] || []).statusId] || []).name === "Ami" ?
                 myMessages.map((message, index) => 
                   <WallMessage
                   key={index}
@@ -362,7 +366,7 @@ class ProfileUser extends React.Component{
                   sendResponse={this.handleSendResponse}
                   deleteResponse={this.handleDeleteResponse}
                   />
-                )
+                ) : null
               }
             </Messages>
             <Widget 
@@ -392,6 +396,7 @@ export default connect(
     responseRequest,
     deleteResponse,
     updateUser,
-    updateUsers
+    updateUsers,
+    loadFriends
   }
 )(ProfileUser);

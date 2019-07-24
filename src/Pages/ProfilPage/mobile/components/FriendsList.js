@@ -101,6 +101,8 @@ class FriendsList extends React.Component{
               items={waitingForConfirmation}
               onChange={this.handleSearch}
               users={users}
+              deleteButton
+              deleteFriend={deleteFriend}
             /> :
             this.state.view === 'demande reçu' ?
             <InputSearch

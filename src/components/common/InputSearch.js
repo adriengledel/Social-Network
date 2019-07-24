@@ -27,6 +27,7 @@ const Input = styled.input`
   outline : none;
   height  : 30px;
   background-color : ${colors.background};
+  color   : white;
 `;
 
 const SearchImg = styled.img`

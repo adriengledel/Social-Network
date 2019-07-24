@@ -15,6 +15,10 @@ import Forum           from './components/Forum';
 
 import { colors } from 'styles';
 
+import {
+  PROFIL_USER
+} from 'Routes/Paths.js';
+
 const Container = styled.div`
 
 `;
@@ -105,7 +109,7 @@ class ProfilPageMobile extends React.Component{
       <LandingPage>
         <Container>
           <Head>
-            <User to={`profil/${user._id}`}>
+            <User to={`${PROFIL_USER}/${user._id}`}>
               <Avatar user={user} />  
               {user.pseudo}
             </User>

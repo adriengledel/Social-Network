@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReactDOM from 'react-dom';
 
 import SearchImgPng from 'components/img/icon-search.png';
 import RowUser      from 'components/common/RowUser';
@@ -63,11 +64,31 @@ class InputSearch extends React.Component{
       showList : false
     }
     this.handleFocusInput = this.handleFocusInput.bind(this);
-
+    this.handleDocumentClick = this.handleDocumentClick.bind(this);
   }
   
   handleFocusInput(){
     this.setState({showList : !this.state.showList});
+  }
+
+  componentDidMount() {
+    document.addEventListener('click',    this.handleDocumentClick, false)
+    document.addEventListener('touchend', this.handleDocumentClick, false)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click',    this.handleDocumentClick, false)
+    document.removeEventListener('touchend', this.handleDocumentClick, false)
+  }
+
+  handleDocumentClick(event) {
+    if (!ReactDOM.findDOMNode(this).contains(event.target)) {
+      this.close();
+    }
+  }
+
+  close() {
+    this.setState({showList : false});
   }
 
   render(){

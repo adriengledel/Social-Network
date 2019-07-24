@@ -3,3 +3,4 @@ export const LOST_PASSWORD_PATH     = '/lostpassword';
 export const FORM_CONNECTION_PATH   = '/signup';
 export const AUTHENTIFICATE_PATH    = '/authentificate';
 export const PROFIL_PAGE            = '/profil';
+export const PROFIL_USER            = '/profil-user';

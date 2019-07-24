@@ -21,7 +21,8 @@ import {
   LOST_PASSWORD_PATH,
   FORM_CONNECTION_PATH,
   AUTHENTIFICATE_PATH,
-  PROFIL_PAGE
+  PROFIL_PAGE,
+  PROFIL_USER
 } from './Paths.js';
 
 const isLogged = localStorage.getItem;
@@ -36,6 +37,7 @@ const Routes = ({logged}) => (
         <Route path={FORM_CONNECTION_PATH} component={FormConnection} />  
         <Route path={LOST_PASSWORD_PATH}   component={LostPassword} />
         <Route path={AUTHENTIFICATE_PATH}  component={Authentificate} />
+        <Route path={LOGIN_PAGE_PATH}      component={Login} />
         <Route                             component={Login} />
       </Switch>
     </Router> :
@@ -44,7 +46,7 @@ const Routes = ({logged}) => (
     */
    <Router>
       <Switch>
-        <Route path={`${PROFIL_PAGE}/:id`} component={ProfileUser} />
+        <Route path={`${PROFIL_USER}/:id`} component={ProfileUser} />
         <Route path={PROFIL_PAGE}          component={ProfilPage} />
         <Route                             component={ProfilPage} />
 
