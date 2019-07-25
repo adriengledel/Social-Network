@@ -30,7 +30,7 @@ export const loginRequested = (data) => {
     users
   });
 
-  const initState = (user, users, friends, walls, topics) => ({
+  export const initState = (user, users, friends, walls, topics) => ({
     type : 'LOAD_INIT_STATE',
     user,
     users,

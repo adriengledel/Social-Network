@@ -13,15 +13,15 @@ export default {
     signup : function(send){
         return axios.post(url + '/signup',send,{headers: headers})
     },
-    
     isAuth : function() {
         return (localStorage.getItem('token') !== null);
     },
     logout : function() {
         localStorage.clear();
     },
-    update : function(){
-        return axios.post(url + '/update');
+    lostpassword : function(send) {
+        console.log(send)
+        return axios.post(url + '/lostpassword',send,{headers: headers})
     },
     friendRequest : function(send){
         return socket.emit("friendRequest", send);

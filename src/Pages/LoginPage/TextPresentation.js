@@ -12,7 +12,6 @@ const Text = styled.div`
       line-height  : 40px;
       margin-right : inherit;
     }
-  font-family :Monoton , cursive;
 `;
 
 const HeadSentence = styled.h1`
@@ -20,6 +19,7 @@ const HeadSentence = styled.h1`
   font-weight : 500;
   font-size   : ${typography.huge}em;
   margin      : 3%;
+  font-family : 'Bungee Shade' , cursive;
 `;
 
 const Sentence = styled.div`
@@ -27,6 +27,7 @@ const Sentence = styled.div`
   line-height : 30px;
   color       : ${colors.textColorLogin};
   margin      : 3%;
+  font-family : 'Bungee Inline' , cursive;
 `;
 
 const Blue = styled.span`

@@ -2,6 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { colors, typography} from 'styles';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { initState } from 'store/actions/auth';
+
 
 import {
   LOGIN_PAGE_PATH
@@ -80,8 +84,12 @@ class LoginHeader extends React.Component {
   }
 
   handleClickDeconnection(){
+    const { history } = this.props;
+    console.log(history);
     localStorage.clear();
-    this.setState({redirect : true});
+    history.push('/');
+    this.props.initState();
+    /* this.setState({redirect : true}); */
   }
 
   render() {
@@ -103,4 +111,4 @@ class LoginHeader extends React.Component {
   }
 }
 
-export default LoginHeader
+export default connect(null, {initState})(LoginHeader);

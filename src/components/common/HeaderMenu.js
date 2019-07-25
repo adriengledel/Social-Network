@@ -17,17 +17,18 @@ const Desktop = styled.div`
 
 class HeaderMenu extends React.Component {
     render(){
+        const { history } = this.props;
         return(
             <div style={{zIndex:2}}>
                 <Mobile>
                     <MenuHamburger />
                 </Mobile>
                 <Desktop>
-                    <MenuInline />
+                    <MenuInline history={history} />
                 </Desktop>
             </div>
         );
     }
 }
 
-export default HeaderMenu;
+export default HeaderMenu; 

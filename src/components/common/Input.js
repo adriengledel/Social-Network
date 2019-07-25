@@ -25,12 +25,12 @@ const InputBox = styled.input.attrs(({disabled, wrongValue, error, sizeInputBig}
   line-height    : 2;
   font-size      : ${typography.medium}em;
   overflow       : initial;
-  caret-color    : ${colors.buttonLogin};
+  caret-color    : ${colors.backgroundHighLight};
 
   :focus {
     outline : none;
-    border : 1px solid ${colors.buttonLogin};
-    box-shadow: 0px 0px 18px 0px rgba(35,210,157,0.25);
+    border : 1px solid ${colors.blueElectron};
+    box-shadow: 0px 0px 18px 0px rgba(113, 177, 254,0.25);
   }
 `;
 

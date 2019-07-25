@@ -77,7 +77,8 @@ class ProfilPageMobile extends React.Component{
       valideRecommendRequest, 
       ignoreRecommendRequest, 
       messages,
-      deleteFriend 
+      deleteFriend,
+      history
     } = this.props;
     
     const usersItems = Object.values(users);
@@ -105,8 +106,10 @@ class ProfilPageMobile extends React.Component{
       item => item.firstName.toLowerCase().includes(this.state.filter.trim().toLowerCase()) || 
               item.lastName.toLowerCase().includes(this.state.filter.trim().toLowerCase())
     );
+
+    console.log(history)
     return(
-      <LandingPage>
+      <LandingPage history={history}>
         <Container>
           <Head>
             <User to={`${PROFIL_USER}/${user._id}`}>

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import capitalize from 'capitalize';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 
 import LandingPage from 'components/common/LandingPage';
@@ -13,7 +12,7 @@ import HeaderMenu from 'components/common/HeaderMenu';
 import Matrix from 'components/common/Matrix';
 
 import {loginRequested} from 'store/actions/auth';
-
+import { initState } from 'store/actions/auth';
 
 
 import {
@@ -42,35 +41,47 @@ class LoginPage extends React.Component {
     super(props);
 
     this.state = {
-      redirect : false
+      redirect : false,
+      erreurMessage : ''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(data){
-    /* API.login(data).then((data) => {
-      console.log(data)
-      if (data.data.text === "Authentification réussi") {
-          this.setState({redirect : true});
+  componentDidMount(){
+  }
 
-      }else {
-        auth.authenticate(data, () => {
-          this.setState({redirectToReferrer: true})
-        })
-      }
-    }); */
-    this.props.loginRequested(data);
+  handleSubmit(data){
+    const { history } = this.props;
+    API.login(data).then(res => {
+      history.push('/profil');
+      console.log(history)
+     localStorage.setItem('itemName', JSON.stringify(res.data.token));
+     localStorage.setItem('users', JSON.stringify(res.data.users));
+     localStorage.setItem('user', JSON.stringify(res.data.user));
+     localStorage.setItem('friends', JSON.stringify(res.data.friends));
+     localStorage.setItem('walls', JSON.stringify(res.data.walls));
+     localStorage.setItem('topics', JSON.stringify(res.data.topics));
+     this.props.initState(res.data.user, res.data.users, res.data.friends, res.data.walls, res.data.topics);
+   })
+   .catch(err => {
+     console.log(err)
+     this.setState({erreurMessage : 'Email ou mot de passe incorrecte'});
+   });
+    /* this.props.loginRequested(data);
+    console.log(x)*/
+
   }
 
   render() {
+    console.log('render')
     if (this.state.redirect) {
       return <Redirect to={PROFIL_PAGE}/>;
     }
     return (
     <Container>
       <LandingPage footer={true}>
-        <LoginForm onSubmit={this.handleSubmit} />
+        <LoginForm erreurMessage={this.state.erreurMessage} onSubmit={this.handleSubmit} />
       </LandingPage>
     </Container> 
     );
@@ -78,4 +89,4 @@ class LoginPage extends React.Component {
 }
 
 
-export default withRouter(connect(null, {loginRequested})(LoginPage));
+export default connect(null, {loginRequested, initState})(LoginPage);

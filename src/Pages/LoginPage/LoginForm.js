@@ -1,16 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+
 
 import { LOST_PASSWORD_PATH } from 'Routes/Paths';
 
-
-import Checkbox from 'components/common/Checkbox';
 import TextPresentation from './TextPresentation';
-import Input from 'components/common/Input';
+import Input            from 'components/common/Input';
 
-import { colors, shadows, dimensions, typography} from 'styles.js';
+import { colors, typography } from 'styles.js';
 
 import { FORM_CONNECTION_PATH } from 'Routes/Paths';
 
@@ -25,6 +23,7 @@ const Content = styled.div`
 
   @media(max-width: 800px) {
     flex-wrap       : wrap;
+
   }
 
 `;
@@ -48,9 +47,11 @@ const Form = styled.form`
 `;
 
 const HeadTitleForm = styled.div`
-  font-size     : ${typography.xxlarge}em;
+  font-size     : ${typography.xlarge}em;
   font-weight   : 500;
   color         : ${colors.yellowElectron};
+  font-family   : 'Bungee Inline' , cursive;
+
 `;
 
 const Button = styled.input`
@@ -61,18 +62,17 @@ const Button = styled.input`
   border-radius    : 5px;
   color            : white;
   font-weight      : 500;
-  background-color : ${colors.blueElectron};
+  background-color : ${colors.otherBlue};
   font-size        : 18px;
   cursor           : pointer;
   outline          : 0;
 
   :hover {
-    background-color : ${colors.buttonLoginHover};
+    background-color : ${colors.blueElectron};
   }
 
   :active {
-    background-color : white;
-    color            : ${colors.buttonHighlighText};
+    background-color : ${colors.greenElectron};
     border           : 1px solid ${colors.buttonHighlighText};
   }
   @media(max-width : 601px) {
@@ -100,7 +100,7 @@ const LostPasswordLink = styled(Link)`
   margin-right    : 5px;
 
   :hover {
-    color : ${colors.buttonLogin};
+    color : ${colors.redElectron};
   }
 `;
 
@@ -121,8 +121,15 @@ const TryLabel = styled.p`
 
 const LinkTry = styled(Link)`
   text-decoration : none;
-  color           : ${colors.buttonLogin};
-  text-decoration  : none;
+  color           : ${colors.greenElectron};
+  text-decoration : none;
+`;
+
+const ErrorMessage = styled.div`
+  text-align  : center;
+  min-height  : 20px;
+  color       : ${colors.redElectron};
+  font-weight : 400;
 `;
 
 
@@ -133,7 +140,6 @@ class LoginForm extends React.Component {
     this.handleEmailChange    = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit         = this.handleSubmit.bind(this);
-    this.handleRemember       = this.handleRemember.bind(this);
 
     this.state = {
       email : '',
@@ -165,12 +171,8 @@ class LoginForm extends React.Component {
   }
 
 
-  handleRemember() {
-    this.setState({remember : !this.state.remember});
-  }
-
   render() {
-    const { errorMessage = ''} = this.props;
+    const { erreurMessage = ''} = this.props;
     return (
       <Content>
         <TextPresentation/>
@@ -187,18 +189,15 @@ class LoginForm extends React.Component {
             onChange={this.handlePasswordChange}
             type="password"
           />
+          <ErrorMessage>{erreurMessage}</ErrorMessage>
           <Button type="submit" value="Log in" />
           <FormOptions>
-            <Checkbox
-              checked={this.state.remember}
-              onToggle={this.handleRemember}
-              label="se souvenr de moi"
-              />
+            <div></div>
             <LostPasswordLink to={LOST_PASSWORD_PATH}>mot de passe oublié ?</LostPasswordLink>
           </FormOptions>
           <LinkCreateAccount>
             <TryLabel>Vous n'avez pas encore de compte ?</TryLabel>
-            <LinkTry to={FORM_CONNECTION_PATH}>Rempli le formulaire d'inscription en cliquant ici</LinkTry>
+            <LinkTry to={FORM_CONNECTION_PATH}>Remplissez le formulaire d'inscription en cliquant ici</LinkTry>
           </LinkCreateAccount>
         </Form>
       </Content>

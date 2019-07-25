@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 import socketIOClient from "socket.io-client";
 
@@ -92,7 +91,8 @@ class ProfilPage extends React.Component{
   }
 
   render(){
-    const { users, user, friends } = this.props;
+    const { users, user, friends, history } = this.props;
+    console.log(history)
     return(
       <Container>
         <ProfilPageMobile 
@@ -105,6 +105,7 @@ class ProfilPage extends React.Component{
           ignoreRecommendRequest={this.handleClickIgnoreRecommendFriend}
           deleteFriend={this.handleClickDeleteFriend}
           messages={this.state.messages}
+          history={history}
         />
       </Container>
     );

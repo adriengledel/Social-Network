@@ -7,6 +7,8 @@ import Input from 'components/common/Input';
 
 import { colors, shadows, dimensions, typography} from 'styles.js';
 
+import API from 'utils/API';
+
 
 const Form = styled.form`
   display        : flex;
@@ -40,7 +42,7 @@ const Label = styled.label`
 const ErrorMessage = styled.div`
   text-align  : center;
   min-height  : 20px;
-  color       : ${colors.errors};
+  color       : ${colors.redElectron};
   font-weight : 400;
 `;
 
@@ -53,16 +55,16 @@ const Button = styled.input`
   border-radius    : 5px;
   color            : white;
   font-weight      : 500;
-  background-color : ${colors.buttonLogin};
+  background-color : ${colors.blueElectron};
   font-size        : 18px;
   cursor           : pointer;
   outline          : 0;
   :hover {
-    background-color : ${colors.buttonLoginHover};
+    background-color : ${colors.backgroundHighLight};
   }
   :active {
-    background-color : white;
-    color            : ${colors.buttonHighlighText};
+    background-color : ${colors.blueElectron};
+    color            : ${colors.yellowElectron};
     border           : 1px solid ${colors.buttonHighlighText};
   }
   @media(max-width:800px){
@@ -78,7 +80,7 @@ const SignIn = styled(Link)`
   text-align      : center;
   margin-top      : 10px;
   :hover {
-    color : ${colors.buttonLogin};
+    color : ${colors.redElectron};
   }
 `;
 
@@ -86,52 +88,58 @@ class LostPasswordPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handleSubmit         = this.handleSubmit.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleSubmit      = this.handleSubmit.bind(this);
 
     this.state = {
-      username : '',
+      email : '',
+      erreurMessage : ''
     };
   }
 
-  handleUsernameChange(event) {
-    this.setState({username : event.target.value});
+  handleEmailChange(event) {
+    this.setState({
+      email : event.target.value,
+      erreurMessage : ''
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
     const { onSubmit } = this.props;
-    let { username } = this.state;
+    let { email } = this.state;
 
-    username = username.trim();
+    email = email.trim();
 
-    if (username) {
-      onSubmit(username);
+    if (email) {
+      API.lostpassword({email}).then(res => {
+        console.log(res);
+        this.setState({erreurMessage : res.data.erreur});
+      });
     }
   }
 
   render() {
-    const { errorMessage = ''} = this.props;
     return (
       <LandingPage>
         <Form onSubmit={this.handleSubmit}>
-          <HeadTitleForm>Reset Password</HeadTitleForm>
+          <HeadTitleForm>Réinitialisation du mot de passe</HeadTitleForm>
           <SubTitleForm>
-            Enter your email address below
+            Entrez votre email ci-dessous et vous recevrez 
             <br/>
-            and we'll get you back on track
+            un mail avec votre nouveau mot de passe
           </SubTitleForm>
           <Input
             label="Email"
             mediumSizeLabel={true}
             type="email"
-            placeholder="Your E-mail"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleUsernameChange}
+            placeholder="Email"
+            name="Email"
+            value={this.state.Email}
+            onChange={this.handleEmailChange}
             />
-          <ErrorMessage>{errorMessage}</ErrorMessage>
+          <ErrorMessage>{this.state.erreurMessage}</ErrorMessage>
           <Button type="submit" value="Send" />
           <SignIn to="/">Back to sign in</SignIn>
         </Form>

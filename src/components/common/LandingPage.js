@@ -34,11 +34,11 @@ const Container = styled.div`
 
 class LandingPage extends React.Component {
   render() {
-    const { footer } = this.props;
+    const { footer, history } = this.props;
     return (
         <Background>
           <Container>
-            <HeaderMenu />
+            <HeaderMenu history={history}/>
               {this.props.children}
             {
               footer ?
