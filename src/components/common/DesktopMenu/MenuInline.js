@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { colors, typography} from 'styles';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { initState } from 'store/actions/auth';
@@ -47,12 +47,12 @@ const ButtonHeader = styled.a`
   }
 `;
 
-const ButtonFreeTrial = styled.a`
+const ButtonDisconnect = styled.a`
   color           : white;
   text-decoration : none;
   white-space     : nowrap;
   font-size       : ${typography.xlarge}em;
-  color           : ${colors.textColorLogin};
+  color           : ${colors.blueElectron};
   padding         : 8px 15px;
   border          : 1px solid white;
   border-radius   : 4px;
@@ -60,11 +60,11 @@ const ButtonFreeTrial = styled.a`
   margin-right    : 40px;
 
   :hover {
-    color : ${colors.buttonLogin};
+    color : ${colors.redElectron};
   }
 
   :active {
-    border-color  : ${colors.buttonLogin};
+    border-color  : ${colors.redElectron};
   }
 `;
 
@@ -72,6 +72,20 @@ const Language = styled.div`
   color       : ${colors.textColorLogin};
   font-weight : 400;
   font-size   : ${typography.medium}em;
+`;
+
+const ButtonLink = styled(Link)`
+  color           : white;
+  text-decoration : none;
+  white-space     : nowrap;
+  font-size       : ${typography.xlarge}em;
+  color           : ${colors.blueElectron};
+  font-weight     : 400;
+  margin-right    : 40px;
+
+  :hover {
+    color : ${colors.buttonLogin};
+  }
 `;
 
 class LoginHeader extends React.Component {
@@ -89,26 +103,34 @@ class LoginHeader extends React.Component {
     localStorage.clear();
     history.push('/');
     this.props.initState();
-    /* this.setState({redirect : true}); */
   }
 
   render() {
-    if (this.state.redirect) {
-      return <Redirect to={LOGIN_PAGE_PATH}/>;
-    }
+   const { user } = this.props;
     return (
         <Header>
           <LeftElements>
            
           </LeftElements>
           <RightElements>
-            <ButtonHeader href="#">test</ButtonHeader>
-            <ButtonHeader href="#">test</ButtonHeader>
-            <ButtonFreeTrial onClick={this.handleClickDeconnection}>Déconnection</ButtonFreeTrial>
+            <ButtonLink to="/">Acceuil</ButtonLink>
+            <ButtonLink to="/about">A propos</ButtonLink>
+            {
+              user.role === "admin" && user.logged ?
+              <ButtonLink to="/admin">Admin</ButtonLink> :
+              null
+            }
+            {
+              user.logged ?
+              <ButtonDisconnect onClick={this.handleClickDeconnection}>Déconnection</ButtonDisconnect> :
+              null
+            }
           </RightElements>
         </Header>
     )
   }
 }
 
-export default connect(null, {initState})(LoginHeader);
+export default connect(state => ({
+  user : state.user ? state.user : {}
+}), {initState})(LoginHeader);

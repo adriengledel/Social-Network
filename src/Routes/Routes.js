@@ -9,7 +9,9 @@ import LostPassword   from 'Pages/LostPasswordPage/LostPasswordPage';
 import FormConnection from 'Pages/FormConnection/FormConnection';
 import Authentificate from 'Pages/Authentificate/Authentificate';
 import ProfilPage     from 'Pages/ProfilPage/ProfilPage';
-import ProfileUser    from 'Pages/ProfilPage/mobile/ProfileUser';
+import ProfileUser    from 'Pages/ProfilUser/ProfilUser';
+import About          from 'Pages/About/About';
+import Admin          from 'Pages/Admin/Admin';
 
 /*
   Private pages
@@ -22,12 +24,14 @@ import {
   FORM_CONNECTION_PATH,
   AUTHENTIFICATE_PATH,
   PROFIL_PAGE,
-  PROFIL_USER
+  PROFIL_USER,
+  ABOUT_PATH,
+  ADMIN_PATH
 } from './Paths.js';
 
 const isLogged = localStorage.getItem;
 
-const Routes = ({logged}) => (
+const Routes = ({logged, user}) => (
   !logged ?
     /*
       Public pages
@@ -38,24 +42,36 @@ const Routes = ({logged}) => (
         <Route path={LOST_PASSWORD_PATH}   component={LostPassword} />
         <Route path={AUTHENTIFICATE_PATH}  component={Authentificate} />
         <Route path={LOGIN_PAGE_PATH}      component={Login} />
+        <Route path={ABOUT_PATH}           component={About} />
         <Route                             component={Login} />
       </Switch>
     </Router> :
     /*
     Private pages
     */
+    user.role === "admin" && logged ?
    <Router>
       <Switch>
         <Route path={`${PROFIL_USER}/:id`} component={ProfileUser} />
         <Route path={PROFIL_PAGE}          component={ProfilPage} />
+        <Route path={ABOUT_PATH}           component={About} />
+        <Route path={ADMIN_PATH}           component={Admin} />
         <Route                             component={ProfilPage} />
-
+      </Switch>
+    </Router> :
+    <Router>
+      <Switch>
+        <Route path={`${PROFIL_USER}/:id`} component={ProfileUser} />
+        <Route path={PROFIL_PAGE}          component={ProfilPage} />
+        <Route path={ABOUT_PATH}           component={About} />
+        <Route                             component={ProfilPage} />
       </Switch>
     </Router>
 );
 
 export default connect(
   state => ({
-    logged : localStorage.getItem('itemName')
+    logged : localStorage.getItem('itemName'),
+    user   : state.user
   })
 )(Routes);

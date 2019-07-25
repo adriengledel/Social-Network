@@ -273,7 +273,7 @@ class ProfileUser extends React.Component{
   }
 
   render(){
-    const { users, user, friends, location, walls={} } = this.props;
+    const { users, user, friends, location, walls={}, history } = this.props;
 
     const id = location.pathname.split('/')[2];
     const userProfil = id ? users[id] : '';
@@ -307,7 +307,7 @@ class ProfileUser extends React.Component{
     const myMessages = ((walls || [])[id] || []).messages || [];
     
     return(
-      <LandingPage>
+      <LandingPage history={history}>
         <Container>
           <Head> 
             <Informations 

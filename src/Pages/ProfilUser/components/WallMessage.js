@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const ContainerResponse = styled.div`
   display        : flex;
-  flex-direction : column;
+  flex-direction :  column;
   margin-left    : 25px;
 `;
 
