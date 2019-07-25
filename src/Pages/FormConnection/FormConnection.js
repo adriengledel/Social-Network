@@ -22,7 +22,6 @@ const Container = styled.div`
     flex : 1;
     display : flex;
     flex-direction : column;
-    color : white;
     @media(max-width:1100px){
         font-size : 0.7em;
         margin-top : 30px;
@@ -71,7 +70,7 @@ const InputFile = styled.div`
 const Avatar = styled.div`
   width            : 50px;
   height           : 50px;
-  background-color : ${colors.buttonLogin};
+  background-color : ${colors.yellowElectron};
   border-radius    : 25px;
   overflow         : hidden;
 `;
@@ -83,7 +82,7 @@ const Img = styled.img`
 
 const Label = styled.label`
   cursor          : pointer;
-  color           : ${colors.buttonLogin};
+  color           : ${colors.yellowElectron};
   font-weight     : 400;
   text-decoration : underline;
   margin-left     : -50px;
@@ -91,11 +90,13 @@ const Label = styled.label`
   height          : 50px;
   vertical-align  : middle;
   line-height     : 50px;
+  font-size       : ${typography.large}em;
 `;
 
 const Title = styled.div`
     font-size : ${typography.huge}em;
     text-align : center;
+    color      : ${colors.redElectron};
 `;
 const Right = styled.div`
     min-width      : 270px;
@@ -246,7 +247,8 @@ class FormConnection extends React.Component {
             preferences : '',
             contactInformation : '',
             error : false,
-            redirect : false
+            redirect : false,
+            errorMessage : ''
         }
         this.handleAvatarChange          = this.handleAvatarChange.bind(this);
         this.handlePseudoChange          = this.handlePseudoChange.bind(this);
@@ -401,6 +403,8 @@ class FormConnection extends React.Component {
     
         let hasError = false;
 
+        console.log(email)
+
         if (!pseudo) {
             this.setState({pseudoError : true});
             hasError = true;
@@ -430,6 +434,14 @@ class FormConnection extends React.Component {
             this.setState({genreError : true});
             hasError=true;
         } 
+
+        if(password !== confirmation){
+            this.setState({
+                passwordError : true,
+                confirmationError : true
+            });
+            hasError=true;
+        }
     
         if (hasError) {
             this.setState({error : true});
@@ -442,7 +454,7 @@ class FormConnection extends React.Component {
                 lastName     : this.state.lastName,
                 password     : this.state.password,
                 age          : this.state.age,
-                email         : this.state.email,
+                email        : this.state.email,
                 genre        : this.state.genre,
                 avatarUrl    : this.state.avatarUrl,
                 avatarFile   : this.state.avatarFile,
@@ -450,15 +462,14 @@ class FormConnection extends React.Component {
                 preferences  : this.state.preferences,
                 contactInformation : this.state.contactInformation
             }
-            API.signup(user).then((data) => {
-                if (data.data.text === "Succès") {
+            API.signup(user).then((res) => {
+                if (res.data.text === "Succès") {
                     this.setState({redirect : true});
 
-                } /* else {
-                  auth.authenticate(data, () => {
-                    this.setState({redirectToReferrer: true})
-                  })
-                } */
+                } else {
+                  this.setState({errorMessage : res.data.text});
+                
+                }
               });
         }
 
@@ -497,40 +508,49 @@ class FormConnection extends React.Component {
                         <Left>
                             <Row>
                                 <Input
-                                    label="Pseudonyme"
+                                    label="Pseudonyme*"
                                     onChange={this.handlePseudoChange}
                                     error={this.state.pseudoError}
+                                    colorLabel="#fffa9e"
                                 />
                             </Row>
                             <Row>
                                 <InputSmallLeft>
                                     <Input
-                                        label="Nom"
+                                        label="Nom*"
                                         onChange={this.handleLastNameChange}
                                         error={this.state.lastNameError}
+                                        colorLabel="#fffa9e"
                                     />
                                 </InputSmallLeft>
                                 <InputSmallRight>
                                     <Input
-                                        label="Prénom"
+                                        label="Prénom*"
                                         onChange={this.handleFirstNameChange}
                                         error={this.state.firstNameError}
+                                        autocomplete="off"
+                                        colorLabel="#fffa9e"
                                     />
                                 </InputSmallRight> 
                             </Row>
                             <Row>
                                 <InputSmallLeft>
                                     <Input
-                                        label="Mot de passe"
+                                        label="Mot de passe*"
                                         onChange={this.handlePasswordChange}
                                         error={this.state.passwordError}
+                                        type="password"
+                                        autocomplete="off"
+                                        colorLabel="#fffa9e"
                                     />
                                 </InputSmallLeft>
                                 <InputSmallRight>
                                     <Input
-                                        label="Confirmation"
+                                        label="Confirmation*"
                                         onChange={this.handleConfirmationChange}
-                                        error={this.state.pseudoError}
+                                        error={this.state.confirmationError}
+                                        type="password"
+                                        colorLabel="#fffa9e"
                                     />
                                 </InputSmallRight> 
                             </Row>
@@ -538,15 +558,18 @@ class FormConnection extends React.Component {
                                 <TextArea 
                                     label="Présentation"
                                     onChange={this.handlePresentationChange}
+                                    colorLabel="#fffa9e"
                                 />
                             </LastRow>
                         </Left>
                         <Right>
                             <Row>
                                 <Input
-                                    label="Mail"
+                                    label="Mail*"
                                     onChange={this.handleMailChange}
-                                    error={this.state.mailError}
+                                    error={this.state.emailError}
+                                    type="mail"
+                                    colorLabel="#fffa9e"
                                 />
                             </Row>
                             <CheckboxRow>
@@ -555,17 +578,20 @@ class FormConnection extends React.Component {
                                         checked={this.state.maleChecked}
                                         onToggle={this.handleCheckboxCodeurChange}
                                         value="Codeur"
-                                    />Codeur
+                                        label="Codeur"
+                                    />
                                     <Checkbox 
                                         checked={this.state.femaleChecked}
                                         onToggle={this.handleCheckboxCodeuseChange}
                                         value="Codeuse"
-                                    />Codeuse
+                                        label="Codeuse"
+                                    />
                                 </TwiceInput>
                                 <InputAge 
-                                    label="Age"
+                                    label="Age*"
                                     onChange={this.handleAgeChange}
                                     error={this.state.ageError}
+                                    colorLabel="#fffa9e"
                                 />
                             </CheckboxRow>
                             <Row>
@@ -573,19 +599,20 @@ class FormConnection extends React.Component {
                                     label="Coordonnées"
                                     onChange={this.handleContactInformationChange}
                                     error={this.state.contactInformationError}
-                                />
+                                    colorLabel="#fffa9e"                                />
                             </Row>
                             <LastRow>
                                 <TextArea
                                     label="Préférences"
                                     onChange={this.handlePreferencesChange}
-                                />
+                                    colorLabel="#fffa9e"                                />
                             </LastRow>
                         </Right>
                     </ContainerForm>
                         {
                             this.state.error ?
-                            <Red>{errorMessage}</Red> : null
+                            <Red>{errorMessage}</Red> : 
+                            <Red>{this.state.errorMessage}</Red>
                         }
                         <Button type="submit" value="Envoyer" onClick={this.handleSubmit} />
                 </Container>

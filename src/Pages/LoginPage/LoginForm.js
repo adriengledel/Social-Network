@@ -38,7 +38,7 @@ const Form = styled.form`
     flex      : 1;
   }
     label {
-      color : ${colors.purpleElectron};
+      color : white;
   
         @media(max-width : 361px) {
           margin-top : 5px;

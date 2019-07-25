@@ -305,7 +305,7 @@ class ProfileUser extends React.Component{
     });
 
     const myMessages = ((walls || [])[id] || []).messages || [];
-
+    
     return(
       <LandingPage>
         <Container>

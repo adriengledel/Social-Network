@@ -34,23 +34,24 @@ const TextAreaBox = styled.textarea.attrs(({error}) => ({
     }
 `;
 
-const Label = styled.label.attrs(({mediumSizeLabel, darkLabel}) => ({
+const Label = styled.label.attrs(({mediumSizeLabel, colorLabel}) => ({
   style : {
         fontSize : mediumSizeLabel ? typography.large+'em' : typography.large+'em',
-        color : darkLabel ? colors.darkBlue : colors.disabledInputText
+        color    : colorLabel ? colorLabel : 'white'
   }
 }))`
     margin-bottom : 10px;
+    color : white;
 `;
 
 class TextArea extends React.Component{
   render() {
-    const {placeholder, label, type, onChange, error, value, mediumSizeLabel, darkLabel, name } = this.props;
+    const {placeholder, label, type, onChange, error, value, mediumSizeLabel, name, colorLabel } = this.props;
     return (
       <TextAreaContainer>
         <Label
           mediumSizeLabel={mediumSizeLabel}
-          darkLabel={darkLabel}
+          colorLabel={colorLabel}
         >
           {label}
         </Label>

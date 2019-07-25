@@ -40,15 +40,14 @@ const InputContainer = styled.div`
   width          : 100%
 `;
 
-const Label = styled.label.attrs(({mediumSizeLabel, darkLabel})=> ({
+const Label = styled.label.attrs(({mediumSizeLabel, colorLabel})=> ({
   style : {
         fontSize : mediumSizeLabel ? typography.large+'em' : typography.large+'em',
-        color : darkLabel ? colors.darkBlue : colors.textColorHeadTable
+        color    : colorLabel ? colorLabel : 'white'
   } 
 }))`
   margin-top    : 4%;
   margin-bottom : 10px;
-
     @media(max-width : 600px){
         font-size : ${typography.xlarge}em;
     }
@@ -76,15 +75,14 @@ class Input extends React.Component{
             errorMessage,
             sizeInputBig,
             mediumSizeLabel,
-            darkLabel,
+            colorLabel,
             className
           } = this.props;
-
-    return (
+        return (
       <InputContainer className={className}>
         <Label
          mediumSizeLabel={mediumSizeLabel}
-         darkLabel={darkLabel}
+         colorLabel={colorLabel}
          >{label}</Label>
         <InputBox
           disabled={disabled}
