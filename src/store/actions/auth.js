@@ -5,7 +5,7 @@ export const loginRequested = (data) => {
 
      API.login(data).then(res => {
        console.log('res', res)
-      localStorage.setItem('itemName', JSON.stringify(res.data.token));
+      localStorage.setItem('token', JSON.stringify(res.data.token));
       localStorage.setItem('users', JSON.stringify(res.data.users));
       localStorage.setItem('user', JSON.stringify(res.data.user));
       localStorage.setItem('friends', JSON.stringify(res.data.friends));

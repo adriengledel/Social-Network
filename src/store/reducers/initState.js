@@ -11,11 +11,11 @@ export const initState = (state=initialState, action) => {
     console.log('reducer add user');
     return {
       ...state,
-      user : action.user,
-      users : action.users,
+      user    : action.user,
+      users   : action.users,
       friends : action.friends,
-      walls : action.walls,
-      topics : action.topics
+      walls   : action.walls,
+      topics  : action.topics
     };
 
     default : return state;

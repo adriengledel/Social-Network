@@ -12,8 +12,12 @@ import { loadFriends } from 'store/actions/friends';
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
-export var socket = socketIOClient('http://localhost:8000/');
+import { token } from '../LoginPage/LoginPage';
 
+import { socket } from 'Pages/LoginPage/LoginPage';
+
+/* var socket;
+ */
 const Container = styled.div`
   height : 100%;
 `;
@@ -34,7 +38,16 @@ class ProfilPage extends React.Component{
     this.handleClickIgnoreRecommendFriend  = this.handleClickIgnoreRecommendFriend.bind(this); 
     this.handleClickDeleteFriend           = this.handleClickDeleteFriend.bind(this); 
 
-    /* socket = socketIOClient('http://localhost:8000/'); */
+/*     socket = socketIOClient('http://localhost:8000/');
+ */  
+
+    socket.on('connect', () => {
+      console.log(token)
+    })
+    
+    socket.emit('identify', {
+      token
+    })
     socket.on('topicsData', (datas) =>{
       console.log(datas)
       localStorage.setItem('topics', JSON.stringify(datas));

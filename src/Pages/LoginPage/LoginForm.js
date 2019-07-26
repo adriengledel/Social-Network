@@ -132,6 +132,10 @@ const ErrorMessage = styled.div`
   font-weight : 400;
 `;
 
+const UsersConnected = styled.div`
+    color : ${colors.greenElectron};
+`;
+
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -172,12 +176,13 @@ class LoginForm extends React.Component {
 
 
   render() {
-    const { erreurMessage = ''} = this.props;
+    const { erreurMessage = '', usersConnected} = this.props;
     return (
       <Content>
         <TextPresentation/>
         <Form onSubmit={this.handleSubmit}>
           <HeadTitleForm>Enter the Javascript</HeadTitleForm>
+          <UsersConnected>Membres connectés : {usersConnected}</UsersConnected>
           <Input 
             label="Email"
             mediumSizeLabel={true}

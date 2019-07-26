@@ -1,5 +1,5 @@
 import API from 'utils/API';
-import { socket } from 'Pages/ProfilPage/ProfilPage';
+import { socket } from 'Pages/LoginPage/LoginPage';
 
 export const messageRequest = (userIdSender, userIdRecipient, message, messageId, email, wallId) => {
   return (dispatch, getState) => {

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { socket } from 'Pages/ProfilPage/ProfilPage';
-
+import { socket } from 'Pages/LoginPage/LoginPage';
 const headers = {
     'Content-Type': 'application/json'
 }
@@ -79,6 +78,9 @@ export default {
     },
     updateUser : function(send){
         return socket.emit("updateUser", send);
+    },
+    logout : function(send){
+        return socket.emit("logout", send);
     }
 
 }

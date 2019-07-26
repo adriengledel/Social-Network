@@ -1,6 +1,5 @@
 
 import API from 'utils/API';
-import { socket } from 'Pages/ProfilPage/ProfilPage';
 
 export const friendRequest = (userIdSender, userIdRecipient, statusIdSender, statusIdRecipient, email) => {
   console.log(userIdSender)

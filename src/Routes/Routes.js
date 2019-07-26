@@ -39,10 +39,10 @@ const Routes = ({logged, user}) => (
     <Router>
       <Switch>
         <Route path={FORM_CONNECTION_PATH} component={FormConnection} />  
+        <Route path={ABOUT_PATH}           component={About} />
         <Route path={LOST_PASSWORD_PATH}   component={LostPassword} />
         <Route path={AUTHENTIFICATE_PATH}  component={Authentificate} />
         <Route path={LOGIN_PAGE_PATH}      component={Login} />
-        <Route path={ABOUT_PATH}           component={About} />
         <Route                             component={Login} />
       </Switch>
     </Router> :
@@ -71,7 +71,7 @@ const Routes = ({logged, user}) => (
 
 export default connect(
   state => ({
-    logged : localStorage.getItem('itemName'),
+    logged : localStorage.getItem('token'),
     user   : state.user
   })
 )(Routes);

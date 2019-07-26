@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import capitalize from 'capitalize';
 import { connect } from 'react-redux';
+import socketIOClient from "socket.io-client";
 
 
 import LandingPage from 'components/common/LandingPage';
@@ -20,6 +21,10 @@ import {
 } from 'Routes/Paths.js';
 
 import API from 'utils/API';
+
+
+export var token;
+export var socket = socketIOClient('http://localhost:8000/');
 
 const Container = styled.div`
   height : 100%;
@@ -42,10 +47,16 @@ class LoginPage extends React.Component {
 
     this.state = {
       redirect : false,
-      erreurMessage : ''
+      erreurMessage : '',
+      usersConnected : 0
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    socket.on('usersConnected', (datas) => {
+      console.log(datas);
+      this.setState({usersConnected : datas.length});
+    });
   }
 
   componentDidMount(){
@@ -55,8 +66,8 @@ class LoginPage extends React.Component {
     const { history } = this.props;
     API.login(data).then(res => {
       history.push('/profil');
-      console.log(history)
-     localStorage.setItem('itemName', JSON.stringify(res.data.token));
+     token = res.data.token;
+     localStorage.setItem('token', JSON.stringify(res.data.token));
      localStorage.setItem('users', JSON.stringify(res.data.users));
      localStorage.setItem('user', JSON.stringify(res.data.user));
      localStorage.setItem('friends', JSON.stringify(res.data.friends));
@@ -81,7 +92,7 @@ class LoginPage extends React.Component {
     return (
     <Container>
       <LandingPage footer={true}>
-        <LoginForm erreurMessage={this.state.erreurMessage} onSubmit={this.handleSubmit} />
+        <LoginForm usersConnected={this.state.usersConnected} erreurMessage={this.state.erreurMessage} onSubmit={this.handleSubmit} />
       </LandingPage>
     </Container> 
     );

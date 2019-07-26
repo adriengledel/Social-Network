@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { initState } from 'store/actions/auth';
 
+import API from 'utils/API';
 
 import {
   LOGIN_PAGE_PATH
@@ -98,11 +99,11 @@ class LoginHeader extends React.Component {
   }
 
   handleClickDeconnection(){
-    const { history } = this.props;
-    console.log(history);
+    const { history, user } = this.props;
     localStorage.clear();
     history.push('/');
     this.props.initState();
+    API.logout(user._id);
   }
 
   render() {
@@ -113,17 +114,24 @@ class LoginHeader extends React.Component {
            
           </LeftElements>
           <RightElements>
-            <ButtonLink to="/">Acceuil</ButtonLink>
-            <ButtonLink to="/about">A propos</ButtonLink>
             {
-              user.role === "admin" && user.logged ?
-              <ButtonLink to="/admin">Admin</ButtonLink> :
-              null
-            }
-            {
-              user.logged ?
-              <ButtonDisconnect onClick={this.handleClickDeconnection}>Déconnection</ButtonDisconnect> :
-              null
+              !user.logged ?
+              <>
+               <ButtonLink to="/">Acceuil</ButtonLink>
+               <ButtonLink to="/about">A propos</ButtonLink>
+               <ButtonLink to="/signup">Inscription</ButtonLink>
+               <ButtonLink to="/lostpassword">Mot de passe Perdu</ButtonLink>
+              </> : 
+               <>
+               <ButtonLink to="/">Acceuil</ButtonLink>
+               <ButtonLink to="/about">A propos</ButtonLink>
+               {
+                 user.role === "admin" ?
+                 <ButtonLink to="/admin">Admin</ButtonLink> :
+                 null
+               }
+               <ButtonDisconnect onClick={this.handleClickDeconnection}>Déconnection</ButtonDisconnect>
+              </>
             }
           </RightElements>
         </Header>
