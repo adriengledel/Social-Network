@@ -57,9 +57,7 @@ class LoginPage extends React.Component {
       console.log(datas);
       this.setState({usersConnected : datas.length});
     });
-  }
 
-  componentDidMount(){
   }
 
   handleSubmit(data){
@@ -84,7 +82,6 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    console.log('render')
     if (this.state.redirect) {
       return <Redirect to={PROFIL_PAGE}/>;
     }

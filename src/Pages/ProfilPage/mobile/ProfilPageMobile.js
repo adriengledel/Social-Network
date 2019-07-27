@@ -107,7 +107,6 @@ class ProfilPageMobile extends React.Component{
               item.lastName.toLowerCase().includes(this.state.filter.trim().toLowerCase())
     );
 
-    console.log(history)
     return(
       <LandingPage history={history}>
         <Container>

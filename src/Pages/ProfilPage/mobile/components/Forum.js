@@ -355,7 +355,6 @@ class Forum extends React.Component{
       }
     }
 
-    console.log(invited);
    
     return(
       <Container>

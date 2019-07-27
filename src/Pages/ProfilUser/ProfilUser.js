@@ -200,6 +200,13 @@ class ProfileUser extends React.Component{
     this.handleDeleteResponse       = this.handleDeleteResponse.bind(this);
     this.handleUpdateUser           = this.handleUpdateUser.bind(this);
 
+    if(!(this.props.usersItemsConnected || []).includes(this.props.user._id)){
+      console.log('identify')
+      socket.emit('identify', {
+        token : JSON.parse(localStorage.getItem('token'))
+      });
+    }
+
     socket.on('updateUsers', (datas) =>{
       console.log(datas)
       localStorage.setItem('users', JSON.stringify(datas));
@@ -404,7 +411,8 @@ export default connect(
     user    : state.user,
     users   : state.users,
     friends : state.friends,
-    walls   : state.walls
+    walls   : state.walls,
+    usersItemsConnected : state.usersConnected
   }), 
   {
     friendRequest,

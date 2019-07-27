@@ -5,18 +5,16 @@ const initialState = {
   walls    : JSON.parse(localStorage.getItem('walls')),
   topics   : JSON.parse(localStorage.getItem('topics'))
 };
-export const initState = (state=initialState, action) => {
+
+
+export const usersConnectedReducer = (state=initialState, action) => {
   switch(action.type){
-    case 'LOAD_INIT_STATE' : 
+    case 'USERS_CONNECTED' : 
     return {
       ...state,
-      user    : action.user,
-      users   : action.users,
-      friends : action.friends,
-      walls   : action.walls,
-      topics  : action.topics
+      usersConnected : action.users,
     };
-
+    
     default : return state;
     
   }

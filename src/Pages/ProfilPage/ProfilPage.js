@@ -8,9 +8,10 @@ import { updateFriendRequest, validRecommendRequest, deleteFriend } from 'store/
 import { loadWalls } from 'store/actions/walls';
 
 
-import { loadTopics } from 'store/actions/topics';
-import { updateUsers }  from 'store/actions/users'
-import { loadFriends } from 'store/actions/friends';
+import { loadTopics }     from 'store/actions/topics';
+import { updateUsers }    from 'store/actions/users'
+import { loadFriends }    from 'store/actions/friends';
+import { usersConnected } from 'store/actions/usersConnected'; 
 
 import ProfilPageMobile from './mobile/ProfilPageMobile';
 
@@ -44,12 +45,19 @@ class ProfilPage extends React.Component{
  */  
 
     socket.on('connect', () => {
-      console.log(token)
-    })
+    });
     
-    socket.emit('identify', {
-      token : JSON.parse(localStorage.getItem('token'))
-    })
+    if(!(this.props.usersItemsConnected || []).includes(this.props.user._id)){
+      console.log('IDENTIFY')
+      socket.emit('identify', {
+        token : JSON.parse(localStorage.getItem('token'))
+      });
+    }
+
+    socket.on('usersConnected', (datas) => {
+      this.props.usersConnected(datas);
+    });
+
     socket.on('topicsData', (datas) =>{
       console.log(datas)
       localStorage.setItem('topics', JSON.stringify(datas));
@@ -58,7 +66,6 @@ class ProfilPage extends React.Component{
     });
 
     socket.on('updateUsers', (datas) =>{
-      console.log(datas)
       localStorage.setItem('users', JSON.stringify(datas));
       this.props.updateUsers(datas);
       /* this.setState({messages : datas}); */
@@ -113,7 +120,6 @@ class ProfilPage extends React.Component{
 
   render(){
     const { users, user, friends, history } = this.props;
-    console.log(history)
     return(
       <Container>
         <ProfilPageMobile 
@@ -138,7 +144,8 @@ export default connect( state => ({
   users : state.users,
   user  : state.user,
   friends : state.friends,
-  topics  : state.topics
+  topics  : state.topics,
+  usersItemsConnected : state.usersConnected
 }), {
   updateDatas,
   updateFriendRequest,
@@ -147,5 +154,6 @@ export default connect( state => ({
   loadTopics,
   updateUsers,
   loadFriends,
-  loadWalls
+  loadWalls,
+  usersConnected
 })(ProfilPage);

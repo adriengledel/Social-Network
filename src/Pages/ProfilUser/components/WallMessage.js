@@ -192,7 +192,6 @@ class WallMessage extends React.Component{
     const { senderId, recipientId, text, date, id, responses } = message;
     const sender = users[senderId];
     const recipient = users[recipientId] || [];
-    console.log(sender, recipient)
     const subId = (responses || []).length+1;
     const lastResponse = responses.length > 0 ? responses[responses.length-1] : [];
 
@@ -233,7 +232,6 @@ class WallMessage extends React.Component{
           responses.map(response => {
             let sender = users[response.senderId];
             let recipient = users[response.recipientId];
-            console.log(response)
             return <ContainerResponse 
               onMouseOver={()=>this.setState({hoverResponse : true})}
               onMouseLeave={()=>this.setState({hoverResponse : false})}

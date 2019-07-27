@@ -100,7 +100,7 @@ class InputSearch extends React.Component{
               buttons ?
               items.map((item, index) => 
               <RowUser 
-                key={index} 
+                key={item._id} 
                 user={users[item.id]} 
                 buttons 
                 onClickLeft={onClickLeft}

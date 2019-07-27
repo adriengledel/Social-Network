@@ -6,6 +6,7 @@ import { topicsReducer } from './reducers/topics';
 import { composeReducers, createReducer } from './composer';
 import { connectRouter } from 'connected-react-router'
 import { initState } from './reducers/initState';
+import { usersConnectedReducer } from './reducers/usersConnected';
 
 export const createRootReducer = (history) => combineReducers({
   router: connectRouter(history),
@@ -23,7 +24,8 @@ const reducers = [
   createReducer(userReducer),
   createReducer(wallsReducer),
   createReducer(friendsReducer),
-  createReducer(topicsReducer)
+  createReducer(topicsReducer),
+  createReducer(usersConnectedReducer)
 ]
 
 export const getRootReducer = () => {

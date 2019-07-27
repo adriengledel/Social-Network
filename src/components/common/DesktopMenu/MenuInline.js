@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { initState } from 'store/actions/auth';
+import { usersConnected } from 'store/actions/usersConnected';
 
 import API from 'utils/API';
 
@@ -103,6 +104,7 @@ class LoginHeader extends React.Component {
     localStorage.clear();
     history.push('/');
     this.props.initState();
+    this.props.usersConnected();
     API.logout(user._id);
   }
 
@@ -130,7 +132,7 @@ class LoginHeader extends React.Component {
                  <ButtonLink to="/admin">Admin</ButtonLink> :
                  null
                }
-               <ButtonDisconnect onClick={this.handleClickDeconnection}>Déconnection</ButtonDisconnect>
+               <ButtonDisconnect href='/' onClick={this.handleClickDeconnection}>Déconnection</ButtonDisconnect>
               </>
             }
           </RightElements>
@@ -141,4 +143,4 @@ class LoginHeader extends React.Component {
 
 export default connect(state => ({
   user : state.user ? state.user : {}
-}), {initState})(LoginHeader);
+}), {initState, usersConnected})(LoginHeader);

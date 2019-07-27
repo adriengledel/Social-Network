@@ -64,7 +64,6 @@ class FriendsList extends React.Component{
     const requestReceived = allFriends.filter(friend => friend.statusId === 5);
     const recommendReceived = allFriends.filter(friend => friend.statusId === 6);
     const ignored = allFriends.filter(friend => friend.statusId === 4);
-    console.log(recommendReceived)
     return(
       <Container className={className}>
         <Head>
