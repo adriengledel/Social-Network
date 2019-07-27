@@ -19,7 +19,7 @@ import SaveButtonPng      from 'components/img/save.png';
 import { colors } from 'styles';
 
 import { friendRequest, recommendRequest } from 'store/actions/friends';
-import { messageRequest, deleteMessage, responseRequest, deleteResponse } from 'store/actions/walls';
+import { messageRequest, deleteMessage, responseRequest, deleteResponse, loadWalls } from 'store/actions/walls';
 import { updateUsers }  from 'store/actions/users';
 import { status } from 'constants/status';
 import { typography } from 'styles';
@@ -211,6 +211,12 @@ class ProfileUser extends React.Component{
       localStorage.setItem('friends', JSON.stringify(friends));
       this.props.loadFriends(friends);
     });
+
+    socket.on('wallsData', (walls) =>{
+      console.log(walls)
+      localStorage.setItem('walls', JSON.stringify(walls));
+      this.props.loadWalls(walls);
+    });
   }
   
   handleClickRequestFriend(){
@@ -231,8 +237,15 @@ class ProfileUser extends React.Component{
     const { user, location, users, walls={} } = this.props;
     const id = location.pathname.split('/')[2];
     const email = users[id].email;
+    const name = `${user.firstName} ${user.lastName}`;
     const messageId = ((walls[id] || {}).messages || []).length+1;
-    this.props.messageRequest(user._id, id, this.state.message, messageId, email);
+
+    if(user._id === id){
+      this.props.messageRequest(user._id, id, this.state.message, messageId);
+    }
+    else{
+      this.props.messageRequest(user._id, id, this.state.message, messageId, {email, name});
+    }
     this.setState({message : ''});
   }
 
@@ -316,13 +329,16 @@ class ProfileUser extends React.Component{
               user={user}
             />
             <ContainerButton>
-            <Status onClick={this.handleClickRequestFriend}>
               {
-                friendProfil.length >= 1 ?
-                status[friendProfil[0].statusId].name :
-                status[1].name
+                user._id !== id ?
+                <Status onClick={this.handleClickRequestFriend}>
+                  {
+                    friendProfil.length >= 1 ?
+                    status[friendProfil[0].statusId].name :
+                    status[1].name
+                  }
+                </Status> : null
               }
-            </Status>
             {
               friendProfil.length >= 1 && friendProfil[0].statusId === 3 ?
                 <ButtonList
@@ -368,11 +384,14 @@ class ProfileUser extends React.Component{
                 ) : null
               }
             </Messages>
-            <Widget 
-              title="Messagerie Privée"	
-              handleNewUserMessage={this.handleNewUserMessage}
-              subtitle={this.state.connect}
-            />
+            {
+              userProfil.logged ?
+              <Widget 
+                title="Messagerie Privée"	
+                handleNewUserMessage={this.handleNewUserMessage}
+                subtitle={this.state.connect}
+              /> : null
+            }
           </Wall>
         </Container>
       </LandingPage>
@@ -396,6 +415,7 @@ export default connect(
     deleteResponse,
     updateUser,
     updateUsers,
-    loadFriends
+    loadFriends,
+    loadWalls
   }
 )(ProfileUser);

@@ -52,7 +52,7 @@ class ProfilPageMobile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      value : 'test',
+      value : 'gestion',
       filter : ''
     }
     this.handleViewChange = this.handleViewChange.bind(this);
@@ -119,9 +119,9 @@ class ProfilPageMobile extends React.Component{
             <SwitchContainer>
               <SwitchButton
                 items={[
-                  {value : 'test', name : 'test'},
-                  {value : 'test1', name : 'test1'},
-                  {value : 'test2', name : 'test2'}
+                  {value : 'gestion', name : 'Gestions des Amis'},
+                  {value : 'fil', name : 'Fil d"actualité'},
+                  {value : 'chat', name : 'Chat Forum'}
                 ]}
                 value={this.state.value}
                 onSelect={this.handleViewChange}
@@ -135,7 +135,7 @@ class ProfilPageMobile extends React.Component{
           </Head>
           <Content>
             {
-              this.state.value === 'test' ?
+              this.state.value === 'gestion' ?
               <FriendsList
                 user={user} 
                 users={users}
@@ -146,7 +146,7 @@ class ProfilPageMobile extends React.Component{
                 ignoreRecommendRequest={ignoreRecommendRequest}
                 deleteFriend={deleteFriend}
               /> :
-              this.state.value === 'test2' ?
+              this.state.value === 'chat' ?
               <Forum 
                 friends={myFriendsConfirmed}
                 users={users}

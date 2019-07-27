@@ -286,16 +286,17 @@ class Forum extends React.Component{
   }
 
   handleAddFriendToTopic(userId){
-    const { topics } = this.props;
+    const { topics, users, user } = this.props;
     const topic = topics.filter(topic => this.state.topicId === topic.topicId);
     const yetInvited = topic[0].inviteId.filter(user => user.id === userId);
     const yetConfirmed = topic[0].confirmId.filter(user => user.id === userId);
-
+    const email = users[userId].email;
+    const name  = `${user.firstName} ${user.lastName}`;
     if(yetInvited.length > 0 || yetConfirmed.length > 0 || userId === topic[0].adminTopicId){
       return;
     }
     else{
-      this.props.addFriendToTopic(this.state.topicId, userId);
+      this.props.addFriendToTopic(this.state.topicId, userId, {email, name});
     }
   }
 
@@ -324,7 +325,8 @@ class Forum extends React.Component{
   render(){
     const {friends=[], topics=[], users=[], user } = this.props;
     const adminTopics = topics.filter(topic => topic.adminTopicId === user._id);
-    const usersItems = Object.values(users);
+    const usersItems = Object.values(users).filter(user => user.logged);
+    const friendsItems = Object.values(friends).filter(friend => users[friend.id].logged);
     let invited = [];
     const inviteTopics = topics.forEach(topic => {
         topic.inviteId.forEach(invite => {
@@ -341,6 +343,7 @@ class Forum extends React.Component{
         }
       });
     });
+
     const myTopics = [...adminTopics, ...invited, ...confirmed];
     const currentTopic = myTopics.filter(topic => topic.topicId === this.state.topicId);
     let testinvite = [];
@@ -376,7 +379,7 @@ class Forum extends React.Component{
               {
                 user.role === "admin" ?
                 usersItems.map(user => <RowUser onClickAdd={() => this.handleAddFriendToTopic(user._id)} addButton user={users[user._id]}/>) :
-                friends.map(friend => <RowUser onClickAdd={() => this.handleAddFriendToTopic(friend.id)} addButton user={users[friend.id]}/>)
+                friendsItems.map(friend => <RowUser onClickAdd={() => this.handleAddFriendToTopic(friend.id)} addButton user={users[friend.id]}/>)
               }
             </ListFriends>
             <InvitedFriends>
@@ -464,7 +467,8 @@ class Forum extends React.Component{
 
 export default connect(state => ({
   user : state.user,
-  topics : state.topics
+  topics : state.topics,
+  users : state.users
 }), 
 { 
   createTopic,

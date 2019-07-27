@@ -66,7 +66,6 @@ class LoginPage extends React.Component {
     const { history } = this.props;
     API.login(data).then(res => {
       history.push('/profil');
-     token = res.data.token;
      localStorage.setItem('token', JSON.stringify(res.data.token));
      localStorage.setItem('users', JSON.stringify(res.data.users));
      localStorage.setItem('user', JSON.stringify(res.data.user));

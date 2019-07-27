@@ -85,19 +85,62 @@ const TextResponse = styled.div`
 const ZoneText = styled.div`
   display        : flex;
   flex-direction : row;
+  align-items    : center;
+  border-radius  : 4px;
+  height         : 35px;
+  margin-top     : 10px;
+  margin-bottom  : 10px;
+  overflow       : hidden;
+  border         : 2px solid ${colors.yellowElectron};
 `;
 
 const TextArea = styled.textarea`
   width : 100%;
   resize : none;
-  height : 30px;
-  background-color : red;
+  height : 100%;
+  background-color : ${colors.backgroundHighLight};
+  border: none;
+  overflow: auto;
+  outline: none;
+  padding-top: 18px;
+  padding-left: 18px;
+  color : white;
+  caret-color : white;
+  font-size   : 16px;
+`;
+
+const Input = styled.input`
+  border           : none;
+  background-color : ${colors.backgroundHighLight};
+  height           : 20px;
+  width            : 40px;
+  color            : white;
+  border-radius    : 4px;
+  border-bottom    : ${colors.redElectron};
 `;
 
 const PublishButton = styled.div`
-  width            : 70px;
-  background-color : red;
-`;
+  display : flex;
+  flex-direction : row;
+  align-items : center;
+  justify-content : center;
+  width : 80px;
+  height : 94%;
+  color  : white;
+  background-color : ${colors.backgroundHighLight};
+  border-left : 2px solid ${colors.yellowElectron};
+  border-radius : 4px;
+  cursor : pointer;
+  :active {
+    background-color : ${colors.red};
+    color : white;
+  }
+  :hover {
+    color : ${colors.blueElectron};
+    border-left : 2px solid ${colors.blueElectron};
+    background-color : ${colors.red};
+  }
+  `;
 
 class WallMessage extends React.Component{
   constructor(props){
@@ -107,20 +150,27 @@ class WallMessage extends React.Component{
       hoverResponse: false,
       showTextArea : false
     }
-    this.handleSendResponse = this.handleSendResponse.bind(this);
+    this.handleClickOnResponse = this.handleClickOnResponse.bind(this);
+    this.handleSendResponse    = this.handleSendResponse.bind(this);
+  }
+
+  handleClickOnResponse(){
+    this.setState({showTextArea : true}, () => {
+      this.responseInput.focus();
+    });
   }
 
   handleSendResponse(){
-    const { user, sendResponse, message } = this.props;
+    const { user, sendResponse, message, userAccount } = this.props;
     const { senderId, recipientId, text, date, id, responses } = message;
     const subId = (responses || []).length+1;
     const lastResponse = responses.length > 0 ? responses[responses.length-1] : [];
 
     if(responses.length > 0){
-      sendResponse(lastResponse.recipientId, lastResponse.senderId, id,`${id}-${subId}`);
+      sendResponse(userAccount._id, lastResponse.senderId, id,`${id}-${subId}`);
     }
     else{
-      sendResponse(recipientId, senderId, id,`${id}-${subId}`);
+      sendResponse(userAccount._id, senderId, id,`${id}-${subId}`);
     }
     this.setState({showTextArea : false});
   }
@@ -129,7 +179,7 @@ class WallMessage extends React.Component{
     const { 
       message, 
       user, 
-      users, 
+      users =[], 
       deleteMessage, 
       value, 
       onChange, 
@@ -141,7 +191,7 @@ class WallMessage extends React.Component{
 
     const { senderId, recipientId, text, date, id, responses } = message;
     const sender = users[senderId];
-    const recipient = users[recipientId];
+    const recipient = users[recipientId] || [];
     console.log(sender, recipient)
     const subId = (responses || []).length+1;
     const lastResponse = responses.length > 0 ? responses[responses.length-1] : [];
@@ -154,8 +204,13 @@ class WallMessage extends React.Component{
         <Head>
           <Left>
             <Sender>{sender.firstName} {sender.lastName} </Sender>
-            <Arrow src={ArrowPng}/>
-            <Recipient> {recipient.firstName} {recipient.lastName}</Recipient>
+            {
+              sender.firstName !== recipient.firstName && sender.lastName !== recipient.lastName ?
+              <>
+              <Arrow src={ArrowPng}/>
+              <Recipient> {recipient.firstName} {recipient.lastName}</Recipient>
+              </> : null
+            }
           </Left>
           <Right>
           {
@@ -214,11 +269,13 @@ class WallMessage extends React.Component{
         <Response>
           {
             !this.state.showTextArea ?
-            <TextResponse onClick={()=>this.setState({showTextArea : true})}>Répondre</TextResponse> :
+            <TextResponse onClick={this.handleClickOnResponse}>Répondre</TextResponse> :
             <ZoneText>
               <TextArea 
                 onChange={onChange}
                 value={value}
+                onBlur={()=> this.setState({showTextArea : false})}
+                ref={(input) => { this.responseInput = input }} 
               />
               <PublishButton onClick={this.handleSendResponse}>Envoyer</PublishButton>
             </ZoneText>

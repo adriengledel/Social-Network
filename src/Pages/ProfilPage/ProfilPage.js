@@ -5,6 +5,8 @@ import socketIOClient from "socket.io-client";
 
 import { updateDatas } from 'store/update';
 import { updateFriendRequest, validRecommendRequest, deleteFriend } from 'store/actions/friends';
+import { loadWalls } from 'store/actions/walls';
+
 
 import { loadTopics } from 'store/actions/topics';
 import { updateUsers }  from 'store/actions/users'
@@ -46,7 +48,7 @@ class ProfilPage extends React.Component{
     })
     
     socket.emit('identify', {
-      token
+      token : JSON.parse(localStorage.getItem('token'))
     })
     socket.on('topicsData', (datas) =>{
       console.log(datas)
@@ -57,7 +59,7 @@ class ProfilPage extends React.Component{
 
     socket.on('updateUsers', (datas) =>{
       console.log(datas)
-      localStorage.setItem('topics', JSON.stringify(datas));
+      localStorage.setItem('users', JSON.stringify(datas));
       this.props.updateUsers(datas);
       /* this.setState({messages : datas}); */
     });
@@ -66,6 +68,12 @@ class ProfilPage extends React.Component{
       console.log(friends)
       localStorage.setItem('friends', JSON.stringify(friends));
       this.props.loadFriends(friends);
+    });
+
+    socket.on('wallsData', (walls) =>{
+      console.log(walls)
+      localStorage.setItem('walls', JSON.stringify(walls));
+      this.props.loadWalls(walls);
     });
     
   }
@@ -138,5 +146,6 @@ export default connect( state => ({
   deleteFriend,
   loadTopics,
   updateUsers,
-  loadFriends
+  loadFriends,
+  loadWalls
 })(ProfilPage);

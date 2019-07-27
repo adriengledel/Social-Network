@@ -12,9 +12,9 @@ export const deleteTopic = (topicId) => {
   };
 }
 
-export const addFriendToTopic = (topicId, userIdRecipient) => {
+export const addFriendToTopic = (topicId, userIdRecipient, email) => {
   return (dispatch, getState) => {
-    API.addFriendToTopic({topicId, userIdRecipient});
+    API.addFriendToTopic({topicId, userIdRecipient, email});
   };
 }
 
